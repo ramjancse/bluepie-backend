@@ -9,12 +9,16 @@ const morgan = require("morgan");
 const port = process.env.PORT || 4000;
 const routes = require("./routes/index");
 app.use(bodyParser.json());
-
+const cors = require('cors');
 const main = async () => {
   try {
     await connectDB();
     app.use(morgan("dev"));
-
+    
+    app.use(cors({
+      origin: 'http://localhost:3000'
+    }));
+    
 
     app.use(routes)
     // app.post("/api/v1/auth/register", (req, res) => {
