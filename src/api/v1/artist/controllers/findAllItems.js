@@ -1,4 +1,4 @@
-const noteService = require("../../../../lib/note");
+const artistService = require("../../../../lib/artist");
 const { query } = require("../../../../utils/index");
 const defaults = require("../../../../config/defaults");
 
@@ -10,7 +10,7 @@ const findAllItems = async (req, res, next) => {
   const search = req.query.search || defaults.search;
 
   try {
-    const notes = await noteService.findAllItems({
+    const artists = await artistService.findAllItems({
       page,
       limit,
       sortType,
@@ -18,10 +18,10 @@ const findAllItems = async (req, res, next) => {
       search,
     });
 
-    const totalItems = await noteService.count({ search });
+    const totalItems = await artistService.count({ search });
     const pagination = query.getPagination({ totalItems, limit, page });
 
-    // response generation
+    // // response generation
 
     const links = query.getHATEOASForAllItems({
       url: req.url,
@@ -33,16 +33,15 @@ const findAllItems = async (req, res, next) => {
     });
 
     const data = query.getTrasformItems({
-      items: notes, 
-      path: '/notes',
-      selection: ['id', 'title', 'description', 'createdAt', 'updatedAt']
+      items: artists, 
+      path: '/artists',
+      selection: ['id', 'artistName', 'fullName', 'createdAt', 'updatedAt']
     })
 
-    
-    console.log("data object is here", data);
-
     res.status(200).json({
-      notes,
+      'Message': 'OK',
+      'Status': 200,
+      data: artists,
       pagination,
       links
     });

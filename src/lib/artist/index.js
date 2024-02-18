@@ -1,8 +1,8 @@
-const { Note } = require("../../model");
+const { Artist } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
 
-const findAll = async ({
+const findAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
   sortType = defaults.sortType,
@@ -11,27 +11,28 @@ const findAll = async ({
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
   const filter = {
-    title: { $regex: search, $options: "i" },
+    artistName: { $regex: search, $options: "i" },
   };
 
-  const notes = await Note.find(filter)
-    .populate({ path: "author", select: "name" })
+  const artists = await Artist.find()
+    .populate({ path: "author", select: "artistName" })
     .sort(sortStr)
     .skip(page * limit - limit)
     .limit(limit);
 
-  return notes.map((note) => ({
-    ...note._doc,
-    id: note.id,
+  return artists.map((artist) => ({
+    ...artist._doc,
+    id: artist.id,
   }));
 };
 
 const count = ({ search = "" }) => {
   const filter = {
-    title: { $regex: search, $options: "i" },
+    artistName: { $regex: search, $options: "i" },
   };
-  return Note.count(filter);
+  return Artist.countDocuments(filter);
 };
+
 
 const create = async ({
   title,
@@ -45,40 +46,40 @@ const create = async ({
     throw error;
   }
 
-  const note = new Note({
+  const artist = new Artist({
     title,
     description,
     status,
     author: author.id,
   });
 
-  await note.save();
+  await artist.save();
   return {
-    ...note._doc,
-    id: note.id,
+    ...artist._doc,
+    id: artist.id,
   };
 };
 
 const findSingleItem = async (id) => {
   if (!id) throw new Error("Id is required");
 
-  const note = await Note.findById(id);
+  const artist = await Artist.findById(id);
 
-  if (!note) {
+  if (!artist) {
     throw notFound();
   }
 
   // expand = expand.split(",").map((item) => item.trim());
 
   // if (expand.includes("author")) {
-  //   await note.populate({
+  //   await artist.populate({
   //     path: "author",
   //     select: "name",
   //   });
   // }
   return {
-    ...note._doc,
-    id: note.id,
+    ...artist._doc,
+    id: artist.id,
   };
 };
 
@@ -89,14 +90,14 @@ const updateOrCreate = async (
   author,
   status = "not_completed"
 ) => {
-  const note = await Note.findById(id);
+  const artist = await Artist.findById(id);
 
   // if (!id) throw new Error("Id is required");
 
-  if (!note) {
-    const note = create({ title, description, status, author });
+  if (!artist) {
+    const artist = create({ title, description, status, author });
     return {
-      note,
+      artist,
       code: 201,
     };
   }
@@ -108,51 +109,51 @@ const updateOrCreate = async (
     status,
   };
   console.log("payload->>", payload);
-  note.overwrite(payload);
-  await note.save();
-  return { note: { ...note._doc, id: note.id }, code: 200 };
+  artist.overwrite(payload);
+  await artist.save();
+  return { artist: { ...artist._doc, id: artist.id }, code: 200 };
 };
 
 const updateProperties = async (id, { title, description, status }) => {
-  const note = await Note.findById(id);
+  const artist = await Artist.findById(id);
 
-  if (!note) {
+  if (!artist) {
     throw notFound();
   }
 
   const payload = { title, description, status };
   Object.keys(payload).forEach((key) => {
-    note[key] = payload[key] ?? note[key];
+    artist[key] = payload[key] ?? artist[key];
   });
-  // note.title = title ?? note.title
-  // note.description = description ?? note.description
-  // note.status = status ?? note.status
+  // artist.title = title ?? artist.title
+  // artist.description = description ?? artist.description
+  // artist.status = status ?? artist.status
 
-  await note.save();
-  return { ...note._doc, id: note.id };
+  await artist.save();
+  return { ...artist._doc, id: artist.id };
 };
 
 const removeItem = async (id) => {
-  const note = await Note.findById(id);
+  const artist = await Artist.findById(id);
 
-  if (!note) {
+  if (!artist) {
     throw notFound();
   }
-  return Note.findByIdAndDelete(id);
+  return Artist.findByIdAndDelete(id);
 };
 
 const checkOwnership = async ({ resourceId, userId }) => {
-  const note = await Note.findById(resourceId);
-  if (note) {
+  const artist = await Artist.findById(resourceId);
+  if (artist) {
     throw notFound();
   }
-  if (note._doc.author.toString() === userId) {
+  if (artist._doc.author.toString() === userId) {
     return true;
   }
   return false;
 };
 module.exports = {
-  findAll,
+  findAllItems,
   create,
   count,
   findSingleItem,
@@ -161,3 +162,4 @@ module.exports = {
   removeItem,
   checkOwnership,
 };
+

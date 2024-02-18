@@ -1,22 +1,22 @@
-const noteService = require("../../../../lib/note");
+const artistService = require("../../../../lib/artist");
 const create = async (req, res, next) => {
   const { title, description, status, author } = req.body;
   try {
-    const note = await noteService.create({
+    const artist = await artistService.create({
       title,
       description,
       status,
       author: req.user.id,
     });
 
-    console.log('note', note);
+    console.log('artist', artist);
     const response = {
       code: 201,
       message: 'Created Successfully',
-      data: {...note},
+      data: {...artist},
       // links: {
-      //   self: `/notes/${note.id}`,
-      //   author: `/notes/${note.id}/author`,
+      //   self: `/artists/${artist.id}`,
+      //   author: `/artists/${artist.id}/author`,
       // }
     }
 

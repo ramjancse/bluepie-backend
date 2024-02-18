@@ -1,4 +1,4 @@
-const noteService = require('../../../../lib/note')
+const artistService = require('../../../../lib/artist')
 
 const findSingleItem = async (req, res, next)=>{
     console.log('all req->>>', req.params);
@@ -6,7 +6,7 @@ const findSingleItem = async (req, res, next)=>{
     const expand = req.query.expand || ''
 
     try {
-        const note = await noteService.findSingleItem(id)
+        const note = await artistService.findSingleItem(id)
         const response = {
             data: note,
             links:{

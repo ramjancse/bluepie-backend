@@ -1,4 +1,4 @@
-const noteService = require("../../../../lib/note");
+const artistService = require("../../../../lib/artist");
 
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
@@ -6,7 +6,7 @@ const updateItem = async (req, res, next) => {
   console.log("id from here", id);
 
   try {
-    const {note, code} = await noteService.updateOrCreate(id, {
+    const {artist, code} = await artistService.updateOrCreate(id, {
       title: req.body.title,
       description: req.body.description,
       author: req.user,
@@ -16,9 +16,9 @@ const updateItem = async (req, res, next) => {
     const response ={
       code,
       message: code === 200? 'Updated successfully' : 'Created successfully',
-      data : note,
+      data : artist,
       links:{
-        self: `notes/${note.id}`
+        self: `artists/${artist.id}`
       }
     }
     res.status(code).json(response);

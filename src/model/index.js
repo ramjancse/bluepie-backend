@@ -1,9 +1,8 @@
-const Note = require("./Note");
+const Artist = require("./Artist");
 const User = require("./User");
-const Category = require("./Category");
+// const Category = require("./Category");
 
 module.exports = {
-  Note,
-  User,
-  Category,
+  Artist,
+  User
 };

@@ -1,17 +1,17 @@
-const noteService = require("../../../../lib/note");
+const artistService = require("../../../../lib/artist");
 
 const updateItemPatch = async (req, res, next) => {
   const { id } = req.params;
  
   try {
-    const note = await noteService.updateProperties(id, req.body);
+    const artist = await artistService.updateProperties(id, req.body);
 
     const response ={
       code: 200,
       message: 'Updated successfully',
-      data : note,
+      data : artist,
       links:{
-        self: `notes/${note.id}`
+        self: `artists/${artist.id}`
       }
     }
     res.status(200).json(response);
