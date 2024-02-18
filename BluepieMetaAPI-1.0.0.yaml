@@ -1,0 +1,2522 @@
+---
+openapi: 3.0.0
+info:
+  title: Blue Pie API
+  description: BluepieMeta API
+  contact:
+    name: Bluepie
+    url: https://bluepiemeta.com
+    email: info@bluepiemeta.com
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/RAMJANCSE_1/bluepiemeta/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:4000/api/v1
+  description: Dev
+tags:
+- name: Auth
+  description: Authentication Endpoints
+paths:
+  /auth/signup:
+    post:
+      tags:
+      - Auth
+      description: Create of a new account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_signup_body'
+      responses:
+        "201":
+          description: Signup Successfull
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /auth/logout:
+    post:
+      tags:
+      - Auth
+      description: Logout the user
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /auth/signin:
+    post:
+      tags:
+      - Auth
+      description: Login to your account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth_signin_body'
+      responses:
+        "201":
+          description: Signin Successfull
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201_1'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /artists:
+    get:
+      tags:
+      - Artist
+      description: Retrive all Artist
+      parameters:
+      - name: page
+        in: query
+        description: current page number
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 2
+      - name: limit
+        in: query
+        description: maximum items to be returned
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 10
+      - name: sort_type
+        in: query
+        description: the type of sort (asc or dsc)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: dsc
+          enum:
+          - asc
+          - dsc
+      - name: sort_by
+        in: query
+        description: sort key
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: updatedAt
+      - name: search
+        in: query
+        description: search terms
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: title
+      responses:
+        "200":
+          description: Return a list of Artist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    post:
+      tags:
+      - Artist
+      description: Create a New Artist
+      operationId: Create a new Artist
+      requestBody:
+        description: To create a new Artist must need to provide valid data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/artists_body'
+      responses:
+        "201":
+          description: Successfully created a new Artist
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/ArtistCreateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /artists/{id}:
+    get:
+      tags:
+      - Artist
+      description: Fetch a single Artists
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      - name: expand
+        in: query
+        description: expand author
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: author
+      responses:
+        "200":
+          description: Single Artist view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    put:
+      tags:
+      - Artist
+      description: Create or update the entire Artist Info
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/artists_id_body'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistUpdateDTO'
+        "201":
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistCreateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Artist
+      description: Delete a Artist Info by id
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "204":
+          description: Artist Delete
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Artist
+      description: Partially update an Artist Information
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/artists_id_body_1'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistUpdateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /albums:
+    get:
+      tags:
+      - Albums
+      description: Retrive all Albums
+      parameters:
+      - name: page
+        in: query
+        description: current page number
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 2
+      - name: limit
+        in: query
+        description: maximum items to be returned
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 10
+      - name: sort_type
+        in: query
+        description: the type of sort (asc or dsc)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: dsc
+          enum:
+          - asc
+          - dsc
+      - name: sort_by
+        in: query
+        description: sort key
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: updatedAt
+      - name: search
+        in: query
+        description: search terms
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: title
+      responses:
+        "200":
+          description: Return a list of Albums
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    post:
+      tags:
+      - Albums
+      description: Create a New Albums
+      operationId: Create a new Albums
+      requestBody:
+        description: To create a new Albums must need to provide valid data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/albums_body'
+      responses:
+        "201":
+          description: Successfully created a new Category
+          content:
+            appliation/json:
+              schema:
+                $ref: '#/components/schemas/AlbumCreateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /albums/{id}:
+    get:
+      tags:
+      - Albums
+      description: Fetch a single Albums
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      - name: expand
+        in: query
+        description: expand author
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: author
+      responses:
+        "200":
+          description: Single Album view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    put:
+      tags:
+      - Albums
+      description: Create or update the Albums
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/albums_id_body'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumUpdateDTO'
+        "201":
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumCreateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Albums
+      description: Delete a Albums by id
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "204":
+          description: Album delete
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Albums
+      description: Partially update a Albums
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/albums_id_body_1'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumUpdateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+  /users:
+    get:
+      tags:
+      - User
+      description: Retrive all Albums
+      parameters:
+      - name: page
+        in: query
+        description: current page number
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 2
+      - name: limit
+        in: query
+        description: maximum items to be returned
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 10
+      - name: sort_type
+        in: query
+        description: the type of sort (asc or dsc)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: dsc
+          enum:
+          - asc
+          - dsc
+      - name: sort_by
+        in: query
+        description: sort key
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: updatedAt
+      - name: search
+        in: query
+        description: search terms
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: title
+      responses:
+        "200":
+          description: Return a list of Users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+  /users/{id}:
+    get:
+      tags:
+      - User
+      description: Fetch a single User
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      - name: expand
+        in: query
+        description: expand author
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: author
+      responses:
+        "200":
+          description: Single User view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+    put:
+      tags:
+      - User
+      description: Create or update the User
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_id_body'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumUpdateDTO'
+        "201":
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumCreateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - User
+      description: Delete a User by id
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      responses:
+        "204":
+          description: Album delete
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - User
+      description: Partially update a User
+      parameters:
+      - name: id
+        in: path
+        description: It will be Artist ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_id_body_1'
+      responses:
+        "200":
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumUpdateDTO'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_500'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    Artist:
+      allOf:
+      - required:
+        - artistName
+        - fullName
+        - region
+        - sex
+        type: object
+        properties:
+          artistId:
+            type: integer
+            format: int32
+            example: 1
+          userId:
+            type: integer
+            format: int32
+            example: 1
+          artistType:
+            type: string
+            example: Single
+          nameOfType:
+            type: string
+            example: Lyricist
+            enum:
+            - indie
+            - artist
+            - lyricist
+            - composer
+            - producer
+          artistName:
+            type: string
+            example: Jah Mason
+          fullName:
+            type: string
+            example: Jah Mason
+          sex:
+            type: string
+            example: Male
+          region:
+            type: string
+            example: USA
+          artistImage:
+            type: string
+            format: url
+            example: https://bluepiemeta/uploads/profilepucture.jpg
+          artistLinks:
+            $ref: '#/components/schemas/artists_artistLinks'
+          socialMedia:
+            $ref: '#/components/schemas/artists_socialMedia'
+      - $ref: '#/components/schemas/Timestamp'
+    User:
+      allOf:
+      - required:
+        - email
+        - userName
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int32
+            example: 1
+          userName:
+            type: string
+            example: john_doe
+          email:
+            type: string
+            example: john.doe@example.com
+          fullName:
+            type: string
+            example: Jah Mason
+          age:
+            type: number
+            example: 30
+          gender:
+            type: string
+            example: Male
+          role:
+            type: string
+            example: admin
+          permission:
+            type: string
+            example: "true"
+          profilePicture:
+            type: string
+            format: url
+            example: https://bluepiemeta/uploads/profilepicture.jpg
+      - $ref: '#/components/schemas/Timestamp'
+    Album:
+      allOf:
+      - required:
+        - albumId
+        - albumName
+        type: object
+        properties:
+          albumId:
+            type: integer
+            format: int32
+            example: 1
+          userId:
+            type: integer
+            format: int32
+            example: 1
+          artistId:
+            type: integer
+            format: int32
+            example: 1
+          albumType:
+            type: string
+            example: Album/Ep
+          albumName:
+            type: string
+            example: Release Me
+          albumCover:
+            type: string
+            format: url
+            example: https://bluepiemeta/uploads/profilepicture.jpg
+          albumGenre:
+            type: string
+            example: Pop/Pop
+          metadataLanguage:
+            type: string
+            example: English
+          primaryArtist:
+            type: string
+            example: Cliff Raafs
+            enum:
+            - Cliff Raafs
+            - Jah Mason
+            - Cliff Raafs
+          featuringArtist:
+            type: string
+            example: "Cliff Raafs, Jah Mason"
+            enum:
+            - Cliff Raafs
+            - Jah Mason
+            - Cliff Raafs
+          originalReleaseDate:
+            type: string
+            example: 20-10-2024
+          recordLabel:
+            type: string
+            example: Blue Pie Records USA
+          plineYear:
+            type: string
+            example: "2002"
+          pline:
+            type: string
+            example: DJ Central Records
+          clineYear:
+            type: string
+            example: "2002"
+          cline:
+            type: string
+            example: DJ Central Records
+          upcean:
+            type: string
+            example: "8720996363911"
+          tracks:
+            $ref: '#/components/schemas/Album_tracks'
+      - $ref: '#/components/schemas/Timestamp'
+    ArtistCreateDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: Note created succesfully
+        data:
+          $ref: '#/components/schemas/Artist'
+        links:
+          $ref: '#/components/schemas/ArtistCreateDTO_links'
+    AlbumCreateDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: Category created succesfully
+        data:
+          $ref: '#/components/schemas/Album'
+        links:
+          $ref: '#/components/schemas/AlbumCreateDTO_links'
+    ArtistUpdateDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 200
+        message:
+          type: string
+          example: Artist Information updated Successfully updated
+        data:
+          $ref: '#/components/schemas/Artist'
+        links:
+          $ref: '#/components/schemas/ArtistUpdateDTO_links'
+    AlbumUpdateDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 200
+        message:
+          type: string
+          example: Album Successfully updated
+        data:
+          $ref: '#/components/schemas/Album'
+        links:
+          $ref: '#/components/schemas/AlbumUpdateDTO_links'
+    Timestamp:
+      required:
+      - createdAt
+      - updatedAt
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: datetime
+        updatedAt:
+          type: string
+          format: datetime
+    pagination:
+      required:
+      - limit
+      - page
+      - totalItems
+      - totalPage
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 2
+        limit:
+          type: integer
+          format: int32
+          example: 10
+        next:
+          type: integer
+          format: int32
+          example: 3
+        prev:
+          type: integer
+          format: int32
+          example: 1
+        totalPage:
+          type: integer
+          format: int32
+          example: 5
+        totalItems:
+          type: integer
+          format: int32
+          example: 50
+    AuthorDTO:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        name:
+          type: string
+          example: author name
+    auth_signup_body:
+      required:
+      - email
+      - name
+      - password
+      type: object
+      properties:
+        username:
+          type: string
+          example: ramjancse
+        name:
+          type: string
+          example: Ramjan Ali
+        email:
+          type: string
+          format: email
+          example: ramjancse@gmail.com
+        password:
+          type: string
+          format: password
+          example: password123
+    inline_response_201:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: Signup Successfull
+        data:
+          $ref: '#/components/schemas/inline_response_201_data'
+        links:
+          $ref: '#/components/schemas/inline_response_201_links'
+    inline_response_400:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 400
+        error:
+          type: string
+          example: Bad request
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/inline_response_400_data'
+    inline_response_500:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 500
+        error:
+          type: string
+          example: Internal server error
+        message:
+          type: string
+          example: We are sorry for inconvenience. Please try again latter.
+    inline_response_200:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 200
+        message:
+          type: string
+          example: Logout successful
+    inline_response_401:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: You don't have the right permission.
+    auth_signin_body:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: ramjan@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+    inline_response_201_1:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: Signin Successfull
+        data:
+          $ref: '#/components/schemas/inline_response_201_data'
+        links:
+          $ref: '#/components/schemas/inline_response_201_1_links'
+    inline_response_200_1:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - required:
+              - artistId
+              - artistName
+              - author
+              type: object
+              properties:
+                artistId:
+                  type: integer
+                  format: int32
+                  example: 1
+                userId:
+                  type: integer
+                  format: int32
+                  example: 1
+                artistType:
+                  type: string
+                  example: Single
+                nameOfType:
+                  type: string
+                  example: Lyricist
+                  enum:
+                  - indie
+                  - artist
+                  - lyricist
+                  - composer
+                  - producer
+                artistName:
+                  type: string
+                  example: Jah Mason
+                fullName:
+                  type: string
+                  example: Jah Mason
+                sex:
+                  type: string
+                  example: Male
+                region:
+                  type: string
+                  example: USA
+                artistImage:
+                  type: string
+                  format: url
+                  example: https://bluepiemeta/uploads/profilepucture.jpg
+                artistLinks:
+                  type: object
+                  properties:
+                    qqMusic:
+                      type: string
+                      format: url
+                      example: https://qqmusic/artistprofile
+                    netEaseMusic:
+                      type: string
+                      format: url
+                      example: https://neteasemusic/artistprofile
+                    spotify:
+                      type: string
+                      format: url
+                      example: https://spotify/artistprofile
+                    AppleMusic:
+                      type: string
+                      format: url
+                      example: https://applemusic/artistprofile
+                    soundCloud:
+                      type: string
+                      format: url
+                      example: https://soundcloud/artistprofile
+                    beatport:
+                      type: string
+                      format: url
+                      example: https://beatport/artistprofile
+                    deezer:
+                      type: string
+                      format: url
+                      example: https://deezer/artistprofile
+                socialMedia:
+                  type: object
+                  properties:
+                    instagram:
+                      type: string
+                      format: url
+                      example: https://instagram.com/artistprofile
+                    facebook:
+                      type: string
+                      format: url
+                      example: https://facebook.com/artistprofile
+                    twitter:
+                      type: string
+                      format: url
+                      example: https://twitter.com/artistprofile
+                    weibo:
+                      type: string
+                      format: url
+                      example: https://weibo.com/artistprofile
+                    douyin:
+                      type: string
+                      format: url
+                      example: https://douyin.com/artistprofile
+                    tikTok:
+                      type: string
+                      format: url
+                      example: https://tikTok.com/artistprofile
+                author:
+                  $ref: '#/components/schemas/AuthorDTO'
+                link:
+                  type: string
+                  format: url
+                  example: /artists/1
+            - $ref: '#/components/schemas/Timestamp'
+        pagination:
+          $ref: '#/components/schemas/pagination'
+        links:
+          $ref: '#/components/schemas/inline_response_200_1_links'
+    artists_artistLinks:
+      type: object
+      properties:
+        qqMusic:
+          type: string
+          format: url
+          example: https://qqmusic/artistprofile
+        netEaseMusic:
+          type: string
+          format: url
+          example: https://neteasemusic/artistprofile
+        spotify:
+          type: string
+          format: url
+          example: https://spotify/artistprofile
+        AppleMusic:
+          type: string
+          format: url
+          example: https://applemusic/artistprofile
+        soundCloud:
+          type: string
+          format: url
+          example: https://soundcloud/artistprofile
+        beatport:
+          type: string
+          format: url
+          example: https://beatport/artistprofile
+        deezer:
+          type: string
+          format: url
+          example: https://deezer/artistprofile
+    artists_socialMedia:
+      type: object
+      properties:
+        instagram:
+          type: string
+          format: url
+          example: https://instagram.com/artistprofile
+        facebook:
+          type: string
+          format: url
+          example: https://facebook.com/artistprofile
+        twitter:
+          type: string
+          format: url
+          example: https://twitter.com/artistprofile
+        weibo:
+          type: string
+          format: url
+          example: https://weibo.com/artistprofile
+        douyin:
+          type: string
+          format: url
+          example: https://douyin.com/artistprofile
+        tikTok:
+          type: string
+          format: url
+          example: https://tikTok.com/artistprofile
+    artists_body:
+      required:
+      - artistName
+      - fullName
+      - region
+      - sex
+      type: object
+      properties:
+        artistId:
+          type: integer
+          format: int32
+          example: 1
+        userId:
+          type: integer
+          format: int32
+          example: 1
+        artistType:
+          type: string
+          example: Single
+        nameOfType:
+          type: string
+          example: Lyricist
+          enum:
+          - indie
+          - artist
+          - lyricist
+          - composer
+          - producer
+        artistName:
+          type: string
+          example: Jah Mason
+        fullName:
+          type: string
+          example: Jah Mason
+        sex:
+          type: string
+          example: Male
+        region:
+          type: string
+          example: USA
+        artistImage:
+          type: string
+          format: url
+          example: https://bluepiemeta/uploads/profilepucture.jpg
+        artistLinks:
+          $ref: '#/components/schemas/artists_artistLinks'
+        socialMedia:
+          $ref: '#/components/schemas/artists_socialMedia'
+    inline_response_200_2:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/Artist'
+          - type: object
+            properties:
+              author:
+                $ref: '#/components/schemas/AuthorDTO'
+        links:
+          $ref: '#/components/schemas/inline_response_200_2_links'
+    inline_response_404:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not found
+        message:
+          type: string
+          example: resource not found.
+    artists_id_body:
+      required:
+      - artistName
+      - fullName
+      - region
+      - sex
+      type: object
+      properties:
+        artistId:
+          type: integer
+          format: int32
+          example: 1
+        userId:
+          type: integer
+          format: int32
+          example: 1
+        artistType:
+          type: string
+          example: Single
+        nameOfType:
+          type: string
+          example: "Lyricist, Composer"
+          enum:
+          - indie
+          - artist
+          - lyricist
+          - composer
+          - producer
+        artistName:
+          type: string
+          example: Jah Mason
+        fullName:
+          type: string
+          example: Jah Mason
+        sex:
+          type: string
+          example: Male
+        region:
+          type: string
+          example: USA
+        artistImage:
+          type: string
+          format: url
+          example: https://bluepiemeta/uploads/profilepucture.jpg
+        artistLinks:
+          $ref: '#/components/schemas/artists_artistLinks'
+        socialMedia:
+          $ref: '#/components/schemas/artists_socialMedia'
+    artists_id_body_1:
+      required:
+      - artistName
+      - fullName
+      - region
+      - sex
+      type: object
+      properties:
+        artistId:
+          type: integer
+          format: int32
+          example: 1
+        userId:
+          type: integer
+          format: int32
+          example: 1
+        artistType:
+          type: string
+          example: Single
+        nameOfType:
+          type: string
+          example: "Lyricist, Composer"
+          enum:
+          - indie
+          - artist
+          - lyricist
+          - composer
+          - producer
+        artistName:
+          type: string
+          example: Jah Mason
+        fullName:
+          type: string
+          example: Jah Mason
+        sex:
+          type: string
+          example: Male
+        region:
+          type: string
+          example: USA
+        artistImage:
+          type: string
+          format: url
+          example: https://bluepiemeta/uploads/profilepucture.jpg
+        artistLinks:
+          $ref: '#/components/schemas/artists_artistLinks'
+        socialMedia:
+          $ref: '#/components/schemas/artists_socialMedia'
+    inline_response_200_3:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - required:
+              - author
+              - id
+              - name
+              type: object
+              properties:
+                albumId:
+                  type: integer
+                  format: int32
+                  example: 1
+                userId:
+                  type: integer
+                  format: int32
+                  example: 1
+                artistId:
+                  type: integer
+                  format: int32
+                  example: 1
+                albumType:
+                  type: string
+                  example: Album/Ep
+                albumName:
+                  type: string
+                  example: Release Me
+                albumCover:
+                  type: string
+                  format: url
+                  example: https://bluepiemeta/uploads/profilepicture.jpg
+                albumGenre:
+                  type: string
+                  example: Pop/Pop
+                metadataLanguage:
+                  type: string
+                  example: English
+                primaryArtist:
+                  type: string
+                  example: Cliff Raafs
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                featuringArtist:
+                  type: string
+                  example: "Cliff Raafs, Jah Mason"
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                originalReleaseDate:
+                  type: string
+                  example: 20-10-2024
+                recordLabel:
+                  type: string
+                  example: Blue Pie Records USA
+                plineYear:
+                  type: string
+                  example: "2002"
+                pline:
+                  type: string
+                  example: DJ Central Records
+                clineYear:
+                  type: string
+                  example: "2002"
+                cline:
+                  type: string
+                  example: DJ Central Records
+                upcean:
+                  type: string
+                  example: "8720996363911"
+                tracks:
+                  properties:
+                    trackId:
+                      type: integer
+                      format: int32
+                      example: 1
+                    audioFile:
+                      type: integer
+                      format: url
+                    metadataLanguage:
+                      type: string
+                      example: English
+                    titleOfTrack:
+                      type: string
+                      example: Peace in the Valley
+                    version:
+                      type: string
+                      example: Studio
+                    trackGenre:
+                      type: string
+                      example: pop/pop
+                    audioLanguage:
+                      type: string
+                      example: English
+                    primaryArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    composer:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    lyricist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    arranger:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    featuringArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    producer:
+                      type: string
+                      example: Saans me teri saans mili toh mujhe saans aayi
+                    catalogNumber:
+                      type: string
+                      example: CAT670422
+                    isrc:
+                      type: string
+                      example: "8720766539257"
+                author:
+                  $ref: '#/components/schemas/AuthorDTO'
+                link:
+                  type: string
+                  format: url
+                  example: /albums/1
+            - $ref: '#/components/schemas/Timestamp'
+        pagination:
+          $ref: '#/components/schemas/pagination'
+        links:
+          $ref: '#/components/schemas/inline_response_200_3_links'
+    albums_body:
+      required:
+      - albumCover
+      - albumName
+      - audioFile
+      - titleOfTrack
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - type: object
+              properties:
+                albumId:
+                  type: integer
+                  format: int32
+                  example: 1
+                userId:
+                  type: integer
+                  format: int32
+                  example: 1
+                artistId:
+                  type: integer
+                  format: int32
+                  example: 1
+                albumType:
+                  type: string
+                  example: Album/Ep
+                albumName:
+                  type: string
+                  example: Release Me
+                albumCover:
+                  type: string
+                  format: url
+                  example: https://bluepiemeta/uploads/profilepicture.jpg
+                albumGenre:
+                  type: string
+                  example: Pop/Pop
+                metadataLanguage:
+                  type: string
+                  example: English
+                primaryArtist:
+                  type: string
+                  example: Cliff Raafs
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                featuringArtist:
+                  type: string
+                  example: "Cliff Raafs, Jah Mason"
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                originalReleaseDate:
+                  type: string
+                  example: 20-10-2024
+                recordLabel:
+                  type: string
+                  example: Blue Pie Records USA
+                plineYear:
+                  type: string
+                  example: "2002"
+                pline:
+                  type: string
+                  example: DJ Central Records
+                clineYear:
+                  type: string
+                  example: "2002"
+                cline:
+                  type: string
+                  example: DJ Central Records
+                upcean:
+                  type: string
+                  example: "8720996363911"
+                tracks:
+                  properties:
+                    trackId:
+                      type: integer
+                      format: int32
+                      example: 1
+                    audioFile:
+                      type: integer
+                      format: url
+                    metadataLanguage:
+                      type: string
+                      example: English
+                    titleOfTrack:
+                      type: string
+                      example: Peace in the Valley
+                    version:
+                      type: string
+                      example: Studio
+                    trackGenre:
+                      type: string
+                      example: pop/pop
+                    audioLanguage:
+                      type: string
+                      example: English
+                    primaryArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    composer:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    lyricist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    arranger:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    featuringArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    producer:
+                      type: string
+                      example: Saans me teri saans mili toh mujhe saans aayi
+                    catalogNumber:
+                      type: string
+                      example: CAT670422
+                    isrc:
+                      type: string
+                      example: "8720766539257"
+    inline_response_200_4:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/Album'
+          - type: object
+            properties:
+              author:
+                $ref: '#/components/schemas/AuthorDTO'
+        links:
+          $ref: '#/components/schemas/inline_response_200_4_links'
+    albums_id_body:
+      required:
+      - albumCover
+      - albumName
+      - audioFile
+      - titleOfTrack
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - type: object
+              properties:
+                albumId:
+                  type: integer
+                  format: int32
+                  example: 1
+                userId:
+                  type: integer
+                  format: int32
+                  example: 1
+                artistId:
+                  type: integer
+                  format: int32
+                  example: 1
+                albumType:
+                  type: string
+                  example: Album/Ep
+                albumName:
+                  type: string
+                  example: Release Me
+                albumCover:
+                  type: string
+                  format: url
+                  example: https://bluepiemeta/uploads/profilepicture.jpg
+                albumGenre:
+                  type: string
+                  example: Pop/Pop
+                metadataLanguage:
+                  type: string
+                  example: English
+                primaryArtist:
+                  type: string
+                  example: Cliff Raafs
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                featuringArtist:
+                  type: string
+                  example: "Cliff Raafs, Jah Mason"
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                originalReleaseDate:
+                  type: string
+                  example: 20-10-2024
+                recordLabel:
+                  type: string
+                  example: Blue Pie Records USA
+                plineYear:
+                  type: string
+                  example: "2002"
+                pline:
+                  type: string
+                  example: DJ Central Records
+                clineYear:
+                  type: string
+                  example: "2002"
+                cline:
+                  type: string
+                  example: DJ Central Records
+                upcean:
+                  type: string
+                  example: "8720996363911"
+                tracks:
+                  properties:
+                    trackId:
+                      type: integer
+                      format: int32
+                      example: 1
+                    audioFile:
+                      type: integer
+                      format: url
+                    metadataLanguage:
+                      type: string
+                      example: English
+                    titleOfTrack:
+                      type: string
+                      example: Peace in the Valley
+                    version:
+                      type: string
+                      example: Studio
+                    trackGenre:
+                      type: string
+                      example: pop/pop
+                    audioLanguage:
+                      type: string
+                      example: English
+                    primaryArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    composer:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    lyricist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    arranger:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    featuringArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    producer:
+                      type: string
+                      example: Saans me teri saans mili toh mujhe saans aayi
+                    catalogNumber:
+                      type: string
+                      example: CAT670422
+                    isrc:
+                      type: string
+                      example: "8720766539257"
+    albums_id_body_1:
+      required:
+      - albumCover
+      - albumName
+      - audioFile
+      - titleOfTrack
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - type: object
+              properties:
+                albumId:
+                  type: integer
+                  format: int32
+                  example: 1
+                userId:
+                  type: integer
+                  format: int32
+                  example: 1
+                artistId:
+                  type: integer
+                  format: int32
+                  example: 1
+                albumType:
+                  type: string
+                  example: Album/Ep
+                albumName:
+                  type: string
+                  example: Release Me
+                albumCover:
+                  type: string
+                  format: url
+                  example: https://bluepiemeta/uploads/profilepicture.jpg
+                albumGenre:
+                  type: string
+                  example: Pop/Pop
+                metadataLanguage:
+                  type: string
+                  example: English
+                primaryArtist:
+                  type: string
+                  example: Cliff Raafs
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                featuringArtist:
+                  type: string
+                  example: "Cliff Raafs, Jah Mason"
+                  enum:
+                  - Cliff Raafs
+                  - Jah Mason
+                  - Cliff Raafs
+                originalReleaseDate:
+                  type: string
+                  example: 20-10-2024
+                recordLabel:
+                  type: string
+                  example: Blue Pie Records USA
+                plineYear:
+                  type: string
+                  example: "2002"
+                pline:
+                  type: string
+                  example: DJ Central Records
+                clineYear:
+                  type: string
+                  example: "2002"
+                cline:
+                  type: string
+                  example: DJ Central Records
+                upcean:
+                  type: string
+                  example: "8720996363911"
+                tracks:
+                  properties:
+                    trackId:
+                      type: integer
+                      format: int32
+                      example: 1
+                    audioFile:
+                      type: integer
+                      format: url
+                    metadataLanguage:
+                      type: string
+                      example: English
+                    titleOfTrack:
+                      type: string
+                      example: Peace in the Valley
+                    version:
+                      type: string
+                      example: Studio
+                    trackGenre:
+                      type: string
+                      example: pop/pop
+                    audioLanguage:
+                      type: string
+                      example: English
+                    primaryArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    composer:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    lyricist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    arranger:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    featuringArtist:
+                      type: string
+                      example: "Funky Transport, UnderstatementRumble"
+                    producer:
+                      type: string
+                      example: Saans me teri saans mili toh mujhe saans aayi
+                    catalogNumber:
+                      type: string
+                      example: CAT670422
+                    isrc:
+                      type: string
+                      example: "8720766539257"
+    inline_response_200_5:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/Timestamp'
+        pagination:
+          $ref: '#/components/schemas/pagination'
+        links:
+          $ref: '#/components/schemas/inline_response_200_3_links'
+    inline_response_200_6:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - type: object
+            properties:
+              author:
+                $ref: '#/components/schemas/AuthorDTO'
+        links:
+          $ref: '#/components/schemas/inline_response_200_4_links'
+    users_id_body:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/User'
+    users_id_body_1:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/User'
+    Album_tracks:
+      properties:
+        trackId:
+          type: integer
+          format: int32
+          example: 1
+        audioFile:
+          type: integer
+          format: url
+        metadataLanguage:
+          type: string
+          example: English
+        titleOfTrack:
+          type: string
+          example: Peace in the Valley
+        version:
+          type: string
+          example: Studio
+        trackGenre:
+          type: string
+          example: pop/pop
+        audioLanguage:
+          type: string
+          example: English
+        primaryArtist:
+          type: string
+          example: "Funky Transport, UnderstatementRumble"
+        composer:
+          type: string
+          example: "Funky Transport, UnderstatementRumble"
+        lyricist:
+          type: string
+          example: "Funky Transport, UnderstatementRumble"
+        arranger:
+          type: string
+          example: "Funky Transport, UnderstatementRumble"
+        featuringArtist:
+          type: string
+          example: "Funky Transport, UnderstatementRumble"
+        producer:
+          type: string
+          example: Saans me teri saans mili toh mujhe saans aayi
+        catalogNumber:
+          type: string
+          example: CAT670422
+        isrc:
+          type: string
+          example: "8720766539257"
+    ArtistCreateDTO_links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+          example: /notes/1
+        author:
+          type: string
+          format: url
+          example: /notes/1/author
+    AlbumCreateDTO_links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+          example: /categories/1
+        author:
+          type: string
+          format: url
+          example: /categories/1/author
+    ArtistUpdateDTO_links:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /notes/1
+    AlbumUpdateDTO_links:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /albums/1
+    inline_response_201_data:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    inline_response_201_links:
+      type: object
+      properties:
+        self:
+          type: object
+          example: auth/signup
+        signin:
+          type: object
+          example: auth/signin
+    inline_response_400_data:
+      type: object
+      properties:
+        field:
+          type: string
+          example: email
+        message:
+          type: string
+          example: Invalid Email
+        in:
+          type: string
+          example: body
+          enum:
+          - query
+          - body
+    inline_response_201_1_links:
+      type: object
+      properties:
+        self:
+          type: object
+          example: auth/sigin
+    inline_response_200_1_links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+        next:
+          type: string
+          format: url
+          example: notes=3&limit=10
+        prev:
+          type: string
+          format: url
+          example: notes=1&limit=10
+    inline_response_200_2_links:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /artists/1
+        author:
+          type: string
+          example: /artists/1/author
+    inline_response_200_3_links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+        next:
+          type: string
+          format: url
+          example: albums=3&limit=10
+        prev:
+          type: string
+          format: url
+          example: albums=1&limit=10
+    inline_response_200_4_links:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /categories/1
+        author:
+          type: string
+          example: /categories/1/author
+  responses:
+    "500":
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_500'
+    "400":
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_400'
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_401'
+    "404":
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_404'
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      description: current page number
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        example: 2
+    limitParam:
+      name: limit
+      in: query
+      description: maximum items to be returned
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        example: 10
+    sortTypeParam:
+      name: sort_type
+      in: query
+      description: the type of sort (asc or dsc)
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: dsc
+        enum:
+        - asc
+        - dsc
+    sortByParam:
+      name: sort_by
+      in: query
+      description: sort key
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: updatedAt
+    searchParam:
+      name: search
+      in: query
+      description: search terms
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: title
+    idPathParam:
+      name: id
+      in: path
+      description: It will be Artist ID
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        example: 1
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

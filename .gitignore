@@ -1,0 +1,26 @@
+# Dependency directories
+node_modules/
+
+# Environment variables file (if using dotenv or similar)
+.env
+
+# Log files
+*.log
+
+# Cache directories
+.npm
+.cache
+
+# IDE or editor files
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# OS-generated files
+*.swp
+*~
