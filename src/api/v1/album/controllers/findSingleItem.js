@@ -1,19 +1,19 @@
-const artistService = require('../../../../lib/artist')
+const albumService = require('../../../../lib/album')
 
 const findSingleItem = async (req, res, next)=>{
     const id = req.params.id;
     const expand = req.query.expand || ''
 
     try {
-        const artist = await artistService.findSingleItem(id)
+        const album = await albumService.findSingleItem(id)
         const response = {
-            data: artist,
+            data: album,
             links:{
-                self: `/artists/${artist.id}`,
-                author: `/artists/${artist.id}/author`,
+                self: `/albums/${album.id}`,
+                author: `/albums/${album.id}/author`,
             }
         }
-        res.status(200).json(artist)
+        res.status(200).json(album)
     } catch (e) {
         res.status(500).json({
             error: "Invalid ID",

@@ -1,4 +1,5 @@
 const authService = require("../../../../lib/auth");
+const authenticationError = require("../../../../utils/error");
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -18,7 +19,10 @@ const login = async (req, res, next) => {
     };
     res.status(200).json(response);
   } catch (err) {
-    next(err);
+    res.status(500).json({
+      error: "Login Failed",
+      message: err.message
+    });
   }
 };
 

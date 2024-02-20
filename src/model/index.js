@@ -1,8 +1,9 @@
 const Artist = require("./Artist");
 const User = require("./User");
-// const Category = require("./Category");
+const Album = require("./Album");
 
 module.exports = {
   Artist,
-  User
+  User,
+  Album
 };
