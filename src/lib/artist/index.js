@@ -33,23 +33,38 @@ const count = ({ search = "" }) => {
   return Artist.countDocuments(filter);
 };
 
-
 const create = async ({
-  title,
-  description = "",
-  status = "not_completed",
+  artistType,
+  nameOfType,
+  artistName,
+  fullName,
+  sex,
+  artistImage,
+  artistLinks,
+  socialMedia,
+  region,
+  createdAt,
+  updatedAt,
   author,
 }) => {
-  if (!title || !author) {
+  if (!artistType || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
     throw error;
   }
 
   const artist = new Artist({
-    title,
-    description,
-    status,
+    artistType,
+    nameOfType,
+    artistName,
+    fullName,
+    sex,
+    artistImage,
+    artistLinks,
+    socialMedia,
+    region,
+    createdAt,
+    updatedAt,
     author: author.id,
   });
 
@@ -162,4 +177,3 @@ module.exports = {
   removeItem,
   checkOwnership,
 };
-

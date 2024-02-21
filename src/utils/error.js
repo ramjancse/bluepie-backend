@@ -17,10 +17,13 @@ const serverError = (msg = "Internal Server Error") => {
 };
 
 const authenticationError = (msg = "Authentication failed") => {
-  const error = new Error(msg);
-  error.status = 401;
-  return error;
+  const error = {
+    message: msg,
+    status: 401
+  };
+  return new Error(JSON.stringify({ error }));
 };
+
 
 const authorizationError = (msg = "Permission Denied") => {
   const error = new Error(msg);
