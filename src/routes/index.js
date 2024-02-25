@@ -11,16 +11,13 @@ router
   .post("/api/v1/auth/register", authController.register)
   .post("/api/v1/auth/login", authController.login);
 
-
-  // Artist Route
+// Artist Route
 router
   .route("/api/v1/artists")
-  .get(authenticate, authorize("admin", "user"), artistController.findAllItems)
+  .get(artistController.findAllItems)
   .post(authenticate, authorize("admin", "user"), artistController.create);
 
-router
-  .route("/api/v1/artists/:id")
-  .get(authenticate, authorize("admin", "user"), artistController.findSingleItem)
+router.route("/api/v1/artists/:id").get(artistController.findSingleItem);
 //   .put(authenticate, authorize("admin", "user"), artistController.updateItem)
 //   .patch(
 //     authenticate,
@@ -35,14 +32,10 @@ router
 //   );
 
 // Album Routes
-router
-  .route("/api/v1/albums")
-  .get(authenticate, authorize("admin", "user"), albumController.findAllItems)
+router.route("/api/v1/albums").get(albumController.findAllItems);
 //   .post(authenticate, authorize("admin", "user"), artistController.create);
 
-router
-  .route("/api/v1/albums/:id")
-  .get(authenticate, authorize("admin", "user"), albumController.findSingleItem)
+router.route("/api/v1/albums/:id").get(albumController.findSingleItem);
 //   .put(authenticate, authorize("admin", "user"), artistController.updateItem)
 //   .patch(
 //     authenticate,

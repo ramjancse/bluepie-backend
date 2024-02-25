@@ -4,21 +4,18 @@ const Schema = mongoose.Schema;
 // Define enums
 const artistTypeValues = ["Single", "Multiple"];
 const nameOfTypeValues = [
-  "indie",
-  "artist",
-  "lyricist",
-  "composer",
-  "producer",
-  "band",
+  "Indie",
+  "Singer",
+  "Artist",
+  "Lyricist",
+  "Composer",
+  "Producer",
+  "Band",
   "Group",
 ];
 
 const artistSchema = new Schema(
   {
-    id: {
-      type: Number,
-      // required: true
-    },
     author: {
       type: Schema.ObjectId,
       ref: "User", 
@@ -26,7 +23,7 @@ const artistSchema = new Schema(
     artistType: {
       type: String,
       enum: artistTypeValues,
-      // required: true
+      required: true
     },
     nameOfType: {
       type: [String],
@@ -35,7 +32,7 @@ const artistSchema = new Schema(
     },
     artistName: {
       type: String,
-      // required: true
+      required: true
     },
     fullName: {
       type: String,
@@ -54,23 +51,21 @@ const artistSchema = new Schema(
       type: String,
       // required: true
     },
-    artistLinks: {
-      qqMusic: String,
-      netEaseMusic: String,
-      spotify: String,
-      AppleMusic: String,
-      soundCloud: String,
-      beatport: String,
-      deezer: String,
+    artistDiscription: {
+      type: String,
+      // required: true
     },
-    socialMedia: {
-      instagram: String,
-      facebook: String,
-      twitter: String,
-      weibo: String,
-      douyin: String,
-      tikTok: String,
-    },
+    artistLinks: [{
+      id: Number,
+      name: String,
+      link: String
+  }],
+
+    socialMedia: [{
+        id: Number,
+        name: String,
+        link: String
+    }],
   },
   {
     timestamps: true, // Add this option to enable timestamps
