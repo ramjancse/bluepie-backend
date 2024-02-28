@@ -4,12 +4,21 @@ const authenticationError = require("../../../../utils/error");
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const accessToken = await authService.login({ email, password });
+    const {accessToken, user} = await authService.login({ email, password });
     const response = {
       code: 200,
       message: "Login successful",
       data: {
         access_token: accessToken,
+        user : {
+          id: user._id,
+          username: user.username,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          role: user.role,
+          status: user.status,
+        }
       },
       links: {
         self: {

@@ -1,7 +1,7 @@
 const { Artist } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
-
+const { ObjectId } = require('mongoose').Types;
 const findAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
@@ -49,7 +49,7 @@ const create = async ({
   updatedAt,
   author,
 }) => {
-  if (!artistType || !author) {
+  if (!artistName || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
     throw error;
@@ -102,36 +102,37 @@ const findSingleItem = async (id) => {
   };
 };
 
-const updateOrCreate = async (
-  id,
-  title,
-  description,
-  author,
-  status = "not_completed"
-) => {
-  const artist = await Artist.findById(id);
+const updateOrCreate = async (id, artistData) => {
+  try {
+    let artist;
 
-  // if (!id) throw new Error("Id is required");
+    if (id) {
+      const idByQuery = await Artist.findById(id);
+      if (idByQuery && idByQuery._id.equals(id)) {
+        artist = await Artist.findByIdAndUpdate(id, artistData, {
+          new: true,
+          upsert: true,
+        });
+        artist = artistData;
+      } else {
+        artist = new Artist(artistData);
+        await artist.save();
+      }
+    }
 
-  if (!artist) {
-    const artist = create({ title, description, status, author });
-    return {
-      artist,
-      code: 201,
-    };
+    return artistData;
+  } catch (error) {
+    // Handle errors
+    console.error("Error updating or creating artist:", error);
+    throw error;
   }
+}
 
-  const payload = {
-    title,
-    description,
-    author,
-    status,
-  };
-  console.log("payload->>", payload);
-  artist.overwrite(payload);
-  await artist.save();
-  return { artist: { ...artist._doc, id: artist.id }, code: 200 };
-};
+  // const artist = await Artist.findById(id);
+  // artist = await Artist.findByIdAndUpdate(_id, rest, { new: true, upsert: true });
+  // console.log("artist->>>", artist);
+  // return artist;
+
 
 const updateProperties = async (id, { title, description, status }) => {
   const artist = await Artist.findById(id);

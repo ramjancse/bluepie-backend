@@ -7,9 +7,9 @@ const removeItem = require("./removeItem");
 
 module.exports = {
   findAllItems,
-  // create,
+  create,
   findSingleItem,
-  // updateItem,
+  updateItem,
   // updateItemPatch,
   // removeItem
 };

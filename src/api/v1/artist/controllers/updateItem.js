@@ -2,26 +2,47 @@ const artistService = require("../../../../lib/artist");
 
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
-  const status = req.body.status || "not_completed";
-  console.log("id from here", id);
+
+  const {
+     artistType,
+    nameOfType,
+    artistName,
+    fullName,
+    sex,
+    region,
+    artistImage,
+    artistDiscription,
+    artistLinks,
+    socialMedia
+  } = req.body;
+
+  const artistData = {
+    id,
+    artistType,
+    nameOfType,
+    artistName,
+    fullName,
+    sex,
+    region,
+    artistImage,
+    artistDiscription,
+    artistLinks,
+    socialMedia
+  };
+
+
 
   try {
-    const {artist, code} = await artistService.updateOrCreate(id, {
-      title: req.body.title,
-      description: req.body.description,
-      author: req.user,
-      status,
-    });
-
+    const artist = await artistService.updateOrCreate(id, artistData);
     const response ={
-      code,
-      message: code === 200? 'Updated successfully' : 'Created successfully',
+      code: 200,
+      message: 'Updated successfully',
       data : artist,
       links:{
         self: `artists/${artist.id}`
       }
     }
-    res.status(code).json(response);
+    res.status(200).json(response);
   } catch (e) {
     next(e);
   }

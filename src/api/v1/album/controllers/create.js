@@ -1,28 +1,58 @@
-const artistService = require("../../../../lib/artist");
+const albumService = require("../../../../lib/album");
 const create = async (req, res, next) => {
-  const { title, description, status, author } = req.body;
+  const {
+    artistId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    recordLabel,
+    plineYear,
+    pline,
+    clineYear,
+    cline,
+    upcean,
+    tracks,
+  } = req.body;
   try {
-    const artist = await artistService.create({
-      title,
-      description,
-      status,
+    const album = await albumService.create({
+      artistId,
+      albumType,
+      albumName,
+      albumCover,
+      albumGenre,
+      metadataLanguage,
+      primaryArtist,
+      featuringArtist,
+      originalReleaseDate,
+      recordLabel,
+      plineYear,
+      pline,
+      clineYear,
+      cline,
+      upcean,
+      tracks,
       author: req.user.id,
     });
 
-    console.log('artist', artist);
+    console.log("album", album);
     const response = {
       code: 201,
-      message: 'Created Successfully',
-      data: {...artist},
+      message: "Created Successfully",
+      data: { ...album },
       // links: {
       //   self: `/artists/${artist.id}`,
       //   author: `/artists/${artist.id}/author`,
       // }
-    }
+    };
 
-    res.status(201).json(response)
+    res.status(201).json(response);
   } catch (e) {
-    next(e)
+    next(e);
   }
 };
 

@@ -9,7 +9,7 @@ const register = async ({ username, name, email, password }) => {
   if (hasUser) {
     throw badRequest("user already exist");
   }
-  
+
   password = await generateHash(password);
   const user = await createUser({ username, name, email, password });
 
@@ -32,8 +32,11 @@ const login = async ({ email, password }) => {
     role: user.role,
   };
 
-  return  accessToken = await generateToken({ payload });
-
+  const accessToken = await generateToken({ payload });
+  return {
+    user,
+    accessToken,
+  };
 };
 
 module.exports = { register, login };

@@ -18,54 +18,53 @@ const artistSchema = new Schema(
   {
     author: {
       type: Schema.ObjectId,
-      ref: "User", 
+      ref: "User",
     },
+    
+
     artistType: {
       type: String,
       enum: artistTypeValues,
-      required: true
     },
-    nameOfType: {
-      type: [String],
-      enum: nameOfTypeValues,
-      // required: true
-    },
+    nameOfType: [
+      {
+        name: {
+          type: String,
+          enum: nameOfTypeValues,
+        },
+      },
+    ],
     artistName: {
       type: String,
-      required: true
     },
     fullName: {
       type: String,
-      // required: true
     },
     sex: {
       type: String,
       enum: ["male", "female", "other"],
-      // required: true
     },
     region: {
       type: String,
-      // required: true
     },
     artistImage: {
       type: String,
-      // required: true
     },
     artistDiscription: {
       type: String,
-      // required: true
     },
-    artistLinks: [{
-      id: Number,
-      name: String,
-      link: String
-  }],
-
-    socialMedia: [{
-        id: Number,
+    artistLinks: [
+      {
         name: String,
-        link: String
-    }],
+        link: String,
+      },
+    ],
+    socialMedia: [
+      {
+        name: String,
+        link: String,
+      },
+    ],
   },
   {
     timestamps: true, // Add this option to enable timestamps

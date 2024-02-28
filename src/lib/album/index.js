@@ -35,21 +35,47 @@ const count = ({ search = "" }) => {
 
 
 const create = async ({
-  title,
-  description = "",
-  status = "not_completed",
-  author,
+  artistId,
+  albumType,
+  albumName,
+  albumCover,
+  albumGenre,
+  metadataLanguage,
+  primaryArtist,
+  featuringArtist,
+  originalReleaseDate,
+  recordLabel,
+  plineYear,
+  pline,
+  clineYear,
+  cline,
+  upcean,
+  tracks,
+  author
 }) => {
-  if (!title || !author) {
+  if (!albumName || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
     throw error;
   }
 
   const album = new Album({
-    title,
-    description,
-    status,
+    artistId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    recordLabel,
+    plineYear,
+    pline,
+    clineYear,
+    cline,
+    upcean,
+    tracks,
     author: author.id,
   });
 

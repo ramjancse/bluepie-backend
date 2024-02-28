@@ -1,30 +1,64 @@
-const artistService = require("../../../../lib/artist");
+const albumService = require("../../../../lib/album");
 
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
-  const status = req.body.status || "not_completed";
-  console.log("id from here", id);
+  
+  const {
+    artistId,
+    userId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    recordLabel,
+    plineYear,
+    pline,
+    clineYear,
+    cline,
+    upcean,
+    tracks
+ } = req.body;
 
-  try {
-    const {artist, code} = await artistService.updateOrCreate(id, {
-      title: req.body.title,
-      description: req.body.description,
-      author: req.user,
-      status,
-    });
+ const albumData = {
+  artistId,
+    userId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    recordLabel,
+    plineYear,
+    pline,
+    clineYear,
+    cline,
+    upcean,
+    tracks
+ };
 
-    const response ={
-      code,
-      message: code === 200? 'Updated successfully' : 'Created successfully',
-      data : artist,
-      links:{
-        self: `artists/${artist.id}`
-      }
-    }
-    res.status(code).json(response);
-  } catch (e) {
-    next(e);
-  }
+
+
+ try {
+   const album = await albumService.updateOrCreate(id, albumData);
+   const response ={
+     code: 200,
+     message: 'Updated successfully',
+     data : album,
+     links:{
+       self: `artists/${album.id}`
+     }
+   }
+   res.status(200).json(response);
+ } catch (e) {
+   next(e);
+ }
 };
 
 module.exports = updateItem;
