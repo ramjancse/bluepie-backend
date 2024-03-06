@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Define enums
-const albumTypeValues = ["Album", "EP"];
+const albumTypeValues = ["Album", "EP", "Single"];
 const albumGenreValues = [
   "Pop",
   "Rock",
@@ -12,6 +12,11 @@ const albumGenreValues = [
   "Electronic",
   "Jazz",
   "Classical",
+  "World Music",
+  "Latin",
+  "Goth",
+  "Folk",
+  "Contemporary Folk",
   "Other",
 ];
 const languageValues = [
@@ -38,20 +43,51 @@ const trackSchema = new Schema({
   version: {
     type: String,
   },
-  trackGenre: {
+  duration: {
     type: String,
-    enum: albumGenreValues,
   },
+  explicit: {
+    type: String,
+  },
+  trackGenre: [
+    {
+      name: String,
+    },
+  ],
   audioLanguage: {
     type: String,
     enum: languageValues,
   },
-  primaryArtist: String,
-  composer: String,
-  lyricist: String,
-  arranger: String,
-  featuringArtist: String,
-  producer: String,
+  primaryArtist: [
+    {
+      name: String,
+    },
+  ],
+  composer: [
+    {
+      name: String,
+    },
+  ],
+  lyricist: [
+    {
+      name: String,
+    },
+  ],
+  arranger: [
+    {
+      name: String,
+    },
+  ],
+  featuringArtist: [
+    {
+      name: String,
+    },
+  ],
+  producer: [
+    {
+      name: String,
+    },
+  ],
   catalogNumber: String,
   isrc: String,
 });
@@ -85,21 +121,26 @@ const albumSchema = new Schema(
       type: String,
       // required: true
     },
-    albumGenre: {
-      type: String,
-      enum: albumGenreValues,
-      // required: true
-    },
+    albumGenre: [
+      {
+        name: String,
+      },
+    ],
     metadataLanguage: {
       type: String,
       enum: languageValues,
       // required: true
     },
-    primaryArtist: {
-      type: String,
-      // required: true
-    },
-    featuringArtist: String,
+    primaryArtist: [
+      {
+        name: String,
+      },
+    ],
+    featuringArtist: [
+      {
+        name: String,
+      },
+    ],
     originalReleaseDate: {
       type: String,
       // required: true
@@ -108,10 +149,10 @@ const albumSchema = new Schema(
       type: String,
       // required: true
     },
-    plineYear: String,
-    pline: String,
-    clineYear: String,
-    cline: String,
+    pLineYear: String,
+    pLine: String,
+    cLineYear: String,
+    cLine: String,
     upcean: String,
     tracks: [trackSchema],
     author: {
@@ -121,7 +162,7 @@ const albumSchema = new Schema(
     link: String,
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 

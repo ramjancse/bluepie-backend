@@ -33,7 +33,6 @@ const count = ({ search = "" }) => {
   return Album.countDocuments(filter);
 };
 
-
 const create = async ({
   artistId,
   albumType,
@@ -45,13 +44,13 @@ const create = async ({
   featuringArtist,
   originalReleaseDate,
   recordLabel,
-  plineYear,
-  pline,
-  clineYear,
-  cline,
+  pLineYear,
+  pLine,
+  cLineYear,
+  cLine,
   upcean,
   tracks,
-  author
+  author,
 }) => {
   if (!albumName || !author) {
     const error = new Error("Invalid parameters");
@@ -70,13 +69,13 @@ const create = async ({
     featuringArtist,
     originalReleaseDate,
     recordLabel,
-    plineYear,
-    pline,
-    clineYear,
-    cline,
+    pLineYear,
+    pLine,
+    cLineYear,
+    cLine,
     upcean,
     tracks,
-    author: author.id,
+    author,
   });
 
   await album.save();
@@ -109,83 +108,80 @@ const findSingleItem = async (id) => {
   };
 };
 
-const updateOrCreate = async (
-  id,
-  title,
-  description,
-  author,
-  status = "not_completed"
-) => {
+const updateOrCreate = async (id, albumData) => {
+  try {
+    let album;
+
+    if (id) {
+      const idByQuery = await Album.findById(id);
+      if (idByQuery && idByQuery._id.equals(id)) {
+        album = await Album.findByIdAndUpdate(id, albumData, {
+          new: true,
+          upsert: true,
+        });
+        album = albumData;
+      } else {
+        album = new Album(albumData);
+        await album.save();
+      }
+    }
+
+    return albumData;
+  } catch (error) {
+    // Handle errors
+    console.error("Error updating or creating:", error);
+    throw error;
+  }
+};
+
+// const updateProperties = async (id, { title, description, status }) => {
+//   const artist = await Artist.findById(id);
+
+//   if (!artist) {
+//     throw notFound();
+//   }
+
+//   const payload = { title, description, status };
+//   Object.keys(payload).forEach((key) => {
+//     artist[key] = payload[key] ?? artist[key];
+//   });
+//   // artist.title = title ?? artist.title
+//   // artist.description = description ?? artist.description
+//   // artist.status = status ?? artist.status
+
+//   await artist.save();
+//   return { ...artist._doc, id: artist.id };
+// };
+
+const removeItem = async (id, res) => {
   const album = await Album.findById(id);
 
-  // if (!id) throw new Error("Id is required");
-
   if (!album) {
-    const album = create({ title, description, status, author });
-    return {
-      album,
-      code: 201,
-    };
+    res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
+  } else {
+    await Album.findByIdAndDelete(id);
+    res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
-
-  const payload = {
-    title,
-    description,
-    author,
-    status,
-  };
-  console.log("payload->>", payload);
-  artist.overwrite(payload);
-  await artist.save();
-  return { artist: { ...artist._doc, id: artist.id }, code: 200 };
 };
 
-const updateProperties = async (id, { title, description, status }) => {
-  const artist = await Artist.findById(id);
+// const checkOwnership = async ({ resourceId, userId }) => {
+//   const artist = await Artist.findById(resourceId);
+//   if (artist) {
+//     throw notFound();
+//   }
+//   if (artist._doc.author.toString() === userId) {
+//     return true;
+//   }
+//   return false;
+// };
 
-  if (!artist) {
-    throw notFound();
-  }
-
-  const payload = { title, description, status };
-  Object.keys(payload).forEach((key) => {
-    artist[key] = payload[key] ?? artist[key];
-  });
-  // artist.title = title ?? artist.title
-  // artist.description = description ?? artist.description
-  // artist.status = status ?? artist.status
-
-  await artist.save();
-  return { ...artist._doc, id: artist.id };
-};
-
-const removeItem = async (id) => {
-  const artist = await Artist.findById(id);
-
-  if (!artist) {
-    throw notFound();
-  }
-  return Artist.findByIdAndDelete(id);
-};
-
-const checkOwnership = async ({ resourceId, userId }) => {
-  const artist = await Artist.findById(resourceId);
-  if (artist) {
-    throw notFound();
-  }
-  if (artist._doc.author.toString() === userId) {
-    return true;
-  }
-  return false;
-};
 module.exports = {
   findAllItems,
   create,
   count,
   findSingleItem,
   updateOrCreate,
-  updateProperties,
+  // updateProperties,
   removeItem,
-  checkOwnership,
+  // checkOwnership,
 };
-

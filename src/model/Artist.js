@@ -21,7 +21,6 @@ const artistSchema = new Schema(
       ref: "User",
     },
     
-
     artistType: {
       type: String,
       enum: artistTypeValues,

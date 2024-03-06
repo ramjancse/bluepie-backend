@@ -5,7 +5,7 @@ const generateToken = async ({
   payload,
   algorithm = "HS256",
   secret = process.env.ACCESS_TOKEN_SECRET,
-  expiresIn = '1h'
+  expiresIn = '24h'
 }) => {
   try {
     return await jwt.sign(payload, secret, {

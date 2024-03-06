@@ -1,11 +1,10 @@
-const artistService = require("../../../../lib/artist");
+const albumService = require("../../../../lib/album");
 
 const removeItem = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    await artistService.removeItem(id);
-    res.status(204).end();
+    await albumService.removeItem(id, res); // Sending `res` to the service function
   } catch (e) {
     next(e);
   }

@@ -20,18 +20,17 @@ router
 router
   .route("/api/v1/artists/:id")
   .get(artistController.findSingleItem)
-  .put(authenticate, authorize("admin", "user"), artistController.updateItem);
+  .put(authenticate, authorize("admin", "user"), artistController.updateItem)
 //   .patch(
 //     authenticate,
 //     authorize("admin", "user"),
 //     artistController.updateItemPatch
 //   )
-//   .delete(
-//     authenticate,
-//     authorize("admin", "user"),
-//     ownership(),
-//     artistController.removeItem
-//   );
+  .delete(
+    authenticate,
+    authorize("admin", "user"),
+    artistController.removeItem
+  );
 
 // Album Routes
 router
@@ -39,18 +38,18 @@ router
   .get(albumController.findAllItems)
   .post(authenticate, authorize("admin", "user"), albumController.create);
 
-router.route("/api/v1/albums/:id").get(albumController.findSingleItem)
+router.route("/api/v1/albums/:id")
+  .get(albumController.findSingleItem)
   .put(authenticate, authorize("admin", "user"), albumController.updateItem)
 //   .patch(
 //     authenticate,
 //     authorize("admin", "user"),
-//     artistController.updateItemPatch
+//     albumController.updateItemPatch
 //   )
-//   .delete(
-//     authenticate,
-//     authorize("admin", "user"),
-//     ownership(),
-//     artistController.removeItem
-//   );
+  .delete(
+    authenticate,
+    authorize("admin", "user"),
+    albumController.removeItem
+  );
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const { Artist } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
-const { ObjectId } = require('mongoose').Types;
+const { ObjectId } = require("mongoose").Types;
 const findAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
@@ -32,6 +32,8 @@ const count = ({ search = "" }) => {
   };
   return Artist.countDocuments(filter);
 };
+
+
 
 const create = async ({
   id,
@@ -78,6 +80,8 @@ const create = async ({
     id: artist.id,
   };
 };
+
+
 
 const findSingleItem = async (id) => {
   if (!id) throw new Error("Id is required");
@@ -126,13 +130,12 @@ const updateOrCreate = async (id, artistData) => {
     console.error("Error updating or creating artist:", error);
     throw error;
   }
-}
+};
 
-  // const artist = await Artist.findById(id);
-  // artist = await Artist.findByIdAndUpdate(_id, rest, { new: true, upsert: true });
-  // console.log("artist->>>", artist);
-  // return artist;
-
+// const artist = await Artist.findById(id);
+// artist = await Artist.findByIdAndUpdate(_id, rest, { new: true, upsert: true });
+// console.log("artist->>>", artist);
+// return artist;
 
 const updateProperties = async (id, { title, description, status }) => {
   const artist = await Artist.findById(id);
@@ -145,21 +148,20 @@ const updateProperties = async (id, { title, description, status }) => {
   Object.keys(payload).forEach((key) => {
     artist[key] = payload[key] ?? artist[key];
   });
-  // artist.title = title ?? artist.title
-  // artist.description = description ?? artist.description
-  // artist.status = status ?? artist.status
 
   await artist.save();
   return { ...artist._doc, id: artist.id };
 };
 
-const removeItem = async (id) => {
+const removeItem = async (id, res) => {
   const artist = await Artist.findById(id);
 
   if (!artist) {
-    throw notFound();
+    res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
+  } else {
+    await Artist.findByIdAndDelete(id);
+    res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
-  return Artist.findByIdAndDelete(id);
 };
 
 const checkOwnership = async ({ resourceId, userId }) => {
@@ -172,6 +174,7 @@ const checkOwnership = async ({ resourceId, userId }) => {
   }
   return false;
 };
+
 module.exports = {
   findAllItems,
   create,

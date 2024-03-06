@@ -11,5 +11,5 @@ module.exports = {
   findSingleItem,
   updateItem,
   // updateItemPatch,
-  // removeItem
+  removeItem
 };

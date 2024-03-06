@@ -18,10 +18,13 @@ const UserSchema = new Schema(
       type: String,
       unique: true
     },
+    profilePicture: {
+      type: String,
+    },
     password: String,
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'admin', 'client', 'customer'],
       default: 'user',
     },
     status: {

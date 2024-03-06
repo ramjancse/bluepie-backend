@@ -18,6 +18,7 @@ const login = async (req, res, next) => {
           role: user.role,
           role: user.role,
           status: user.status,
+          profilePicture: user.profilePicture,
         }
       },
       links: {
@@ -26,6 +27,7 @@ const login = async (req, res, next) => {
         },
       },
     };
+    
     res.status(200).json(response);
   } catch (err) {
     res.status(500).json({
