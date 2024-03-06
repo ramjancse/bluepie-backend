@@ -52,6 +52,7 @@ const trackSchema = new Schema({
   trackGenre: [
     {
       name: String,
+      status: Boolean
     },
   ],
   audioLanguage: {
@@ -124,6 +125,7 @@ const albumSchema = new Schema(
     albumGenre: [
       {
         name: String,
+        status: Boolean
       },
     ],
     metadataLanguage: {

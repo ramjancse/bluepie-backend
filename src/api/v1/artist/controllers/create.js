@@ -6,7 +6,7 @@ const fs = require("fs");
 
 // Set storage engine for multer
 const storage = multer.diskStorage({
-  destination: "./src/uploads",
+  destination: "./uploads",
   filename: function (req, file, cb) {
     cb(
       null,
