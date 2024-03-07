@@ -36,7 +36,6 @@ const count = ({ search = "" }) => {
 
 
 const create = async ({
-  id,
   artistType,
   nameOfType,
   artistName,
@@ -58,7 +57,6 @@ const create = async ({
   }
 
   const artist = new Artist({
-    id,
     artistType,
     nameOfType,
     artistName,
