@@ -5,6 +5,7 @@ const create = async (req, res, next) => {
     // Extract other fields from req.body
     const {
       artistId,
+      status,
       albumType,
       albumName,
       albumGenre,
@@ -31,6 +32,7 @@ const create = async (req, res, next) => {
         artistId,
         albumType,
         albumName,
+        status,
         albumCover,
         albumGenre,
         metadataLanguage,

@@ -14,13 +14,24 @@ const nameOfTypeValues = [
   "Group",
 ];
 
+const artistStatusValue = [
+  "Pending Approval",
+  "Published",
+  "Deleted",   
+  "Under Review",
+  "Flagged", 
+]
+
 const artistSchema = new Schema(
   {
     author: {
       type: Schema.ObjectId,
       ref: "User",
     },
-    
+    status: {
+      type: String,
+      enum: artistStatusValue,
+    },
     artistType: {
       type: String,
       enum: artistTypeValues,
@@ -49,7 +60,7 @@ const artistSchema = new Schema(
     artistImage: {
       type: String,
     },
-    artistDiscription: {
+    artistDescription: {
       type: String,
     },
     artistLinks: [

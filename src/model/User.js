@@ -29,7 +29,7 @@ const UserSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'approved', 'declined', 'blocked'],
+      enum: ['pending', 'approved', 'declined', 'blocked','deleted'],
       default: 'pending',
     },
   },

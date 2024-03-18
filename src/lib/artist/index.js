@@ -2,6 +2,7 @@ const { Artist } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
 const { ObjectId } = require("mongoose").Types;
+
 const findAllItems = async ({
   page = defaults.page,
   limit = defaults.limit,
@@ -37,6 +38,7 @@ const count = ({ search = "" }) => {
 
 const create = async ({
   artistType,
+  status,
   nameOfType,
   artistName,
   fullName,
@@ -58,6 +60,7 @@ const create = async ({
 
   const artist = new Artist({
     artistType,
+    status,
     nameOfType,
     artistName,
     fullName,

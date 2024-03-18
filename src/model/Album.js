@@ -28,6 +28,23 @@ const languageValues = [
   "Japanese",
   "Other",
 ];
+const typeOfTrackValues = [
+  "Lyrical",
+  "Instrumental"
+];
+
+const albumStatusValue = [
+  "Draft",
+  "Published",
+  "Scheduled",
+  "Archived",
+  "Deleted",   
+  "Under Review",
+  "Pending Approval",
+  "Flagged",   
+  "Drafting",
+  "Scheduled for Revision"
+]
 
 const trackSchema = new Schema({
   audioFile: {
@@ -36,6 +53,10 @@ const trackSchema = new Schema({
   metadataLanguage: {
     type: String,
     enum: languageValues,
+  },
+  typeOfTrack: {
+    type: String,
+    enum: typeOfTrackValues,
   },
   titleOfTrack: {
     type: String,
@@ -53,6 +74,23 @@ const trackSchema = new Schema({
     {
       name: String,
       status: Boolean
+    },
+  ],
+  trackMood: [
+    {
+      name: String,
+      status: Boolean
+    },
+  ],
+  mix: [
+    {
+      name: String,
+      status: Boolean
+    },
+  ],
+  tags: [
+    {
+      name: String,
     },
   ],
   audioLanguage: {
@@ -89,6 +127,38 @@ const trackSchema = new Schema({
       name: String,
     },
   ],
+  mixer: [
+    {
+      name: String,
+    },
+  ],
+  trackLinks: [
+    {
+      name: String,
+      link: String,
+    },
+  ],
+  lyrics: {
+    type: String,
+  },
+  rating: {
+    type: Number,
+  },
+  contract: {
+    type: String,
+  },
+  complianceRight: {
+    type: Boolean,
+  },
+  videoRights: {
+    type: Boolean,
+  },
+  audioRights: {
+    type: Boolean,
+  },
+  promoRights: {
+    type: Boolean,
+  },
   catalogNumber: String,
   isrc: String,
 });
@@ -108,6 +178,10 @@ const albumSchema = new Schema(
       type: String,
       ref: "Artist",
       // required: true
+    },
+    status: {
+      type: String,
+      enum: albumStatusValue,
     },
     albumType: {
       type: String,
