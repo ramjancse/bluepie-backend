@@ -132,6 +132,7 @@ const updateItem = async (req, res, next) => {
       cLine,
       upcean,
       tracks,
+
     } = req.body;
 
     // let albumCover = req.file ? req.file.path : null;

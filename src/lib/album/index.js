@@ -1,7 +1,7 @@
 const { Album } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
-const log = require("../../lib/log/index");
+const {log} = require("../../lib/log/index");
 
 const findAllItems = async ({
   page = defaults.page,
@@ -24,7 +24,7 @@ const findAllItems = async ({
     .skip(page * limit - limit)
     .limit(limit);
 
-    // await log(email,`Query`,ipAddress, userAgent,"All albums query", true,"/albums");
+  await log(email,`Query`,ipAddress, userAgent,"All albums query", true,"/albums");
 
   return albums.map((album) => ({
     ...album._doc,
@@ -59,13 +59,13 @@ const create = async ({
   tracks,
   author,
   email,
-ipAddress,
-userAgent,
+  ipAddress,
+  userAgent,
 }) => {
   if (!albumName || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
-    // await log(email,`Create Error`,ipAddress, userAgent,"Id Not Found",true,"/albums/add");
+    await log(email,`Create Error`,ipAddress, userAgent,"Id Not Found",true,"/albums/add");
     throw error;
   }
 
@@ -89,7 +89,7 @@ userAgent,
     tracks,
     author,
   });
-  // await log(email,`Created`,ipAddress, userAgent,"Album created",true,"/albums/add");
+  await log(email,`Created`,ipAddress, userAgent,"Album created",true,"/albums/add");
 
   await album.save();
   return {
@@ -98,16 +98,16 @@ userAgent,
   };
 };
 
-const findSingleItem = async (id,email, ipAddress, userAgent) => {
+const findSingleItem = async (id, email, ipAddress, userAgent) => {
   if (!id) {
-    // await log(email,`Query`,ipAddress, userAgent,`Id Not Found : ${id}`,true,`/albums/${id}`);
-    throw new Error("Id is required")
-  };
+    await log(email,`Query`,ipAddress, userAgent,`Id Not Found : ${id}`,true,`/albums/${id}`);
+    throw new Error("Id is required");
+  }
 
   const album = await Album.findById(id);
 
   if (!album) {
-    // await log(email,`Query`,ipAddress, userAgent,`Id Not Found : ${id}`,true,`/albums/${id}`);
+    await log(email,`Query`,ipAddress, userAgent,`Id Not Found : ${id}`,true,`/albums/${id}`);
     throw notFound();
   }
 
@@ -119,14 +119,14 @@ const findSingleItem = async (id,email, ipAddress, userAgent) => {
   //     select: "name",
   //   });
   // }
-  // await log(email,`Query`,ipAddress, userAgent,`Single Album Send : ${id}`,true,`/albums/${id}`);
+  await log(email,`Query`,ipAddress, userAgent,`Single Album Send : ${id}`,true,`/albums/${id}`);
   return {
     ...album._doc,
     id: album.id,
   };
 };
 
-const updateOrCreate = async (id, albumData, ) => {
+const updateOrCreate = async (id, albumData, email, ipAddress, userAgent) => {
   try {
     let album;
 
@@ -139,10 +139,10 @@ const updateOrCreate = async (id, albumData, ) => {
         });
 
         album = albumData;
-        // await log(email,`Updated`,ipAddress, userAgent,`Single Album Updated : ${id}`,true,`/albums/${id}`);
+        await log(email,`Updated`,ipAddress, userAgent,`Single Album Updated : ${id}`,true,`/albums/${id}`);
       } else {
         album = new Album(albumData);
-        // await log(email,`Created`,ipAddress, userAgent,`Single Album Created : ${id}`,true,`/albums/${id}`);
+        await log(email,`Created`,ipAddress, userAgent,`Single Album Created : ${id}`,true,`/albums/${id}`);
         await album.save();
       }
     }
@@ -155,15 +155,15 @@ const updateOrCreate = async (id, albumData, ) => {
   }
 };
 
-const removeItem = async (id, res) => {
+const removeItem = async (id, res, email, ipAddress, userAgent) => {
   const album = await Album.findById(id);
 
   if (!album) {
-    // await log(email,`Delete`,ipAddress, userAgent,`Attempt to Delete Single Album: ${id},  Id Not Found`,true,`/albums/${id}`);
+    await log(email,`Delete`,ipAddress, userAgent,`Attempt to Delete Single Album: ${id},  Id Not Found`,true,`/albums/${id}`);
     res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
   } else {
     await Album.findByIdAndDelete(id);
-    // await log(email,`Delete`,ipAddress, userAgent,`Album Deleted Successfully: ${id}`,true,`/albums/${id}`);
+    await log(email,`Delete`,ipAddress, userAgent,`Album Deleted Successfully: ${id}`,true,`/albums/${id}`);
     res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
 };

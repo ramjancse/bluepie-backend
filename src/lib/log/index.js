@@ -1,4 +1,6 @@
-const Log = require("../../model/Log");
+const {Log} = require("../../model");
+const defaults = require("../../config/defaults");
+const { notFound } = require("../../utils/error");
 
 const findAllItems = async ({
   page = defaults.page,
@@ -31,6 +33,7 @@ const count = ({ search = "" }) => {
   return Log.countDocuments(filter);
 };
 
+
 const log = async (
   email,
   activityType,
@@ -52,7 +55,7 @@ const log = async (
     });
 
     await newLog.save();
-    console.log("Log saved successfully.");
+    
   } catch (error) {
     console.error("Error occurred while saving log:", error);
   }

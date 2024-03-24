@@ -1,5 +1,5 @@
 const User = require("../../model/User");
-const log = require("../../lib/log/index");
+const {log} = require("../../lib/log/index");
 
 const findAllItems = async ({
   page = defaults.page,
@@ -22,15 +22,15 @@ const findAllItems = async ({
     .skip(page * limit - limit)
     .limit(limit);
 
-  // await log(
-  //   email,
-  //   "Query",
-  //   ipAddress,
-  //   userAgent,
-  //   "Find All user Successfully",
-  //   true,
-  //   "/users"
-  // );
+  await log(
+    email,
+    "Query",
+    ipAddress,
+    userAgent,
+    "Find All user Successfully",
+    true,
+    "/users"
+  );
 
   return users.map((user) => ({
     ...user._doc,
@@ -47,30 +47,30 @@ const count = ({ search = "" }) => {
 
 const findSingleItem = async (id,email, ipAddress, userAgent) => {
   if (!id) {
-    // await log(
-    //   email,
-    //   `Query`,
-    //   ipAddress,
-    //   userAgent,
-    //   "User Id is required",
-    //   true,
-    //   "/users"
-    // );
+    await log(
+      email,
+      `Query`,
+      ipAddress,
+      userAgent,
+      "User Id is required",
+      true,
+      "/users"
+    );
     throw new Error("Id is required");
   }
 
   const user = await User.findById(id);
 
   if (!user) {
-    // await log(
-    //   email,
-    //   `Query`,
-    //   ipAddress,
-    //   userAgent,
-    //   "User Id Not Found",
-    //   true,
-    //   "/users"
-    // );
+    await log(
+      email,
+      `Query`,
+      ipAddress,
+      userAgent,
+      "User Id Not Found",
+      true,
+      "/users"
+    );
     throw notFound();
   }
 
@@ -83,15 +83,15 @@ const findSingleItem = async (id,email, ipAddress, userAgent) => {
   //   });
   // }
 
-  // await log(
-  //   email,
-  //   `Query`,
-  //   ipAddress,
-  //   userAgent,
-  //   "All user Query Successful",
-  //   true,
-  //   "/users"
-  // );
+  await log(
+    email,
+    `Query`,
+    ipAddress,
+    userAgent,
+    "All user Query Successful",
+    true,
+    "/users"
+  );
 
   return {
     id: user.id,
@@ -115,19 +115,19 @@ const updateOrCreate = async (id, userData, ipAddress, userAgent, email) => {
           new: true,
           upsert: true,
         });
-        // await log(email, `Updated`,ipAddress, userAgent, "User Updated Successfully",true, `/users/${id}`);
+        await log(email, `Updated`,ipAddress, userAgent, "User Updated Successfully",true, `/users/${id}`);
         user = userData;
       } else {
         user = new User(userData);
         await user.save();
-        // await log(email, `Created`, ipAddress, userAgent,"User Created Successfully",true,`/users/${id}`);
+        await log(email, `Created`, ipAddress, userAgent,"User Created Successfully",true,`/users/${id}`);
       }
     }
 
     return userData;
   } catch (error) {
     // Handle errors
-    console.error("Error updating or creating artist:", error);
+    // console.error("Error updating or creating artist:", error);
     throw error;
   }
 };
@@ -136,11 +136,11 @@ const removeItem = async (id, email, ipAddress, userAgent, res) => {
   const user = await User.findById(id);
 
   if (!user) {
-    // await log(email, `Delete`,ipAddress,userAgent,"Deleted Not Successfully", false,`/users/${id}`);
+    await log(email, `Delete`,ipAddress,userAgent,"Deleted Not Successfully", false,`/users/${id}`);
     res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
   } else {
     await User.findByIdAndDelete(id);
-    // await log(email, `Deleted`,ipAddress,userAgent,"Deleted Successfully", true,`/users/${id}`);
+    await log(email, `Deleted`,ipAddress,userAgent,"Deleted Successfully", true,`/users/${id}`);
     res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
 };
@@ -155,7 +155,7 @@ const userExist = async (email) => {
   return user ? true : false;
 };
 
-const createUser = async ({ username, name, email, password }) => {
+const createUser = async ({ username, name, email, password,ipAddress, userAgent  }) => {
   const user = new User({
     username,
     name,
@@ -165,6 +165,8 @@ const createUser = async ({ username, name, email, password }) => {
     status: "pending",
   });
   await user.save();
+  await log(email,`Register`,ipAddress, userAgent,"New Registration",true,"/register");
+
   return { ...user._doc, id: user.id };
 };
 
