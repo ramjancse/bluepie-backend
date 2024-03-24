@@ -3,8 +3,11 @@ const authenticationError = require("../../../../utils/error");
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.userAgent;
+
   try {
-    const {accessToken, user} = await authService.login({ email, password });
+    const {accessToken, user} = await authService.login({ email, password, ipAddress,userAgent });
     const response = {
       code: 200,
       message: "Login successful",

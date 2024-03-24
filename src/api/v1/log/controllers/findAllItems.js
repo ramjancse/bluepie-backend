@@ -1,4 +1,4 @@
-const artistService = require("../../../../lib/artist");
+const logService = require("../../../../lib/log");
 const { query } = require("../../../../utils/index");
 const defaults = require("../../../../config/defaults");
 
@@ -8,12 +8,12 @@ const findAllItems = async (req, res, next) => {
   const sortType = req.sort_type || defaults.sortType;
   const sortBy = req.query.sort_by || defaults.sortBy;
   const search = req.query.search || defaults.search;
-  const email =  req.user.email
+  const email = req.user.email;
   const ipAddress = req.ip || req.connection.remoteAddress;
   const userAgent = req.userAgent;
 
   try {
-    const artists = await artistService.findAllItems({
+    const labels = await logService.findAllItems({
       page,
       limit,
       sortType,
@@ -21,10 +21,10 @@ const findAllItems = async (req, res, next) => {
       search,
       email,
       ipAddress,
-      userAgent
+      userAgent,
     });
 
-    const totalItems = await artistService.count({ search });
+    const totalItems = await logService.count({ search });
     const pagination = query.getPagination({ totalItems, limit, page });
 
     // // response generation
@@ -35,21 +35,21 @@ const findAllItems = async (req, res, next) => {
       query: req.query,
       hasNext: !!pagination.next,
       hasPrev: !!pagination.prev,
-      page
+      page,
     });
 
     const data = query.getTrasformItems({
-      items: artists, 
-      path: '/artists',
-      selection: ['id', 'artistName', 'fullName', 'createdAt', 'updatedAt']
-    })
+      items: labels,
+      path: "/labels",
+      selection: ["id", "labelName", "createdAt", "updatedAt"],
+    });
 
     res.status(200).json({
-      'Message': 'OK',
-      'Status': 200,
-      data: artists,
+      Message: "OK",
+      Status: 200,
+      data: labels,
       pagination,
-      links
+      links,
     });
   } catch (e) {
     next(e);

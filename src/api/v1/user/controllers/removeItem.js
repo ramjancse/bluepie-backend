@@ -1,10 +1,16 @@
-const artistService = require("../../../../lib/artist");
-const { Artist } = require("../../../../model/Artist");
+const userService = require("../../../../lib/user");
+const { User } = require("../../../../model/User");
+const log = require("../../../../lib/log/index");
+
+
 const removeItem = async (req, res, next) => {
   const { id } = req.params;
+  const email =  req.user.email
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.userAgent;
 
   try {
-    await artistService.removeItem(id, res); // Sending `res` to the service function
+    await userService.removeItem(id,email, ipAddress, userAgent, res);
   } catch (e) {
     next(e);
   }

@@ -18,6 +18,10 @@ const create = async (req, res, next) => {
     updatedAt,
     author,
   } = req.body;
+  const email =  req.user.email
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.userAgent;
+
 
   try {
     const artist = await artistService.create({
@@ -35,6 +39,9 @@ const create = async (req, res, next) => {
       createdAt,
       updatedAt,
       author: req.user.id,
+      email,
+      ipAddress,
+      userAgent,
     });
 
     const response = {

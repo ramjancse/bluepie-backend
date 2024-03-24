@@ -8,6 +8,9 @@ const findAllItems = async (req, res, next) => {
   const sortType = req.sort_type || defaults.sortType;
   const sortBy = req.query.sort_by || defaults.sortBy;
   const search = req.query.search || defaults.search;
+  const email =  req.user.email
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.userAgent;
 
   try {
     const artists = await userService.findAllItems({
@@ -16,6 +19,9 @@ const findAllItems = async (req, res, next) => {
       sortType,
       sortBy,
       search,
+      email,
+      ipAddress,
+      userAgent
     });
 
     const totalItems = await userService.count({ search });

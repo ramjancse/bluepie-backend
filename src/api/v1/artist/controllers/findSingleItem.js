@@ -3,9 +3,13 @@ const artistService = require('../../../../lib/artist')
 const findSingleItem = async (req, res, next)=>{
     const id = req.params.id;
     const expand = req.query.expand || ''
+    const email =  req.user.email
+    const ipAddress = req.ip || req.connection.remoteAddress;
+    const userAgent = req.userAgent;
+  
 
     try {
-        const artist = await artistService.findSingleItem(id)
+        const artist = await artistService.findSingleItem(id,email, ipAddress, userAgent)
         const response = {
             data: artist,
             links:{
