@@ -18,6 +18,18 @@ const labelSchema = new Schema(
     labelName: {
       type: String,
     },
+    website: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
     status: {
       type: String,
       enum: labelStatusValue,

@@ -10,6 +10,10 @@ const create = async (req, res, next) => {
   try {
     const label = await labelService.create({
       labelName,
+      website,
+      address,
+      country,
+      state,
       status: "Pending Approval",
       author: req.user.id,
       email,

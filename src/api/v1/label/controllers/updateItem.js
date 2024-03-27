@@ -8,7 +8,7 @@ const updateItem = async (req, res, next) => {
   const userAgent = req.userAgent;
 
   try {
-    const label = await labelService.updateOrCreate(id, labelName,email, ipAddress, userAgent);
+    const label = await labelService.updateOrCreate(id, labelName,website, address, country, state,email, ipAddress, userAgent);
 
     const response = {
       code: 200,

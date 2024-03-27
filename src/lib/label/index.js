@@ -2,7 +2,7 @@ const { Label } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
 const { ObjectId } = require("mongoose").Types;
-const {log} = require("../../lib/log/index");
+const { log } = require("../../lib/log/index");
 
 const findAllItems = async ({
   page = defaults.page,
@@ -48,7 +48,18 @@ const count = ({ search = "" }) => {
   return Label.countDocuments(filter);
 };
 
-const create = async ({ labelName, author, email, ipAddress, userAgent }) => {
+const create = async ({
+  labelName,
+  website,
+  address,
+  country,
+  state,
+  status,
+  author,
+  email,
+  ipAddress,
+  userAgent,
+}) => {
   if (!labelName || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
@@ -66,6 +77,10 @@ const create = async ({ labelName, author, email, ipAddress, userAgent }) => {
 
   const label = new Label({
     labelName,
+    website,
+    address,
+    country,
+    state,
     status: "Pending Approval",
     author: author.id,
   });
@@ -89,9 +104,16 @@ const create = async ({ labelName, author, email, ipAddress, userAgent }) => {
 
 const findSingleItem = async (id, email, ipAddress, userAgent) => {
   if (!id) {
-    await log(email,`Query`,ipAddress, userAgent,"Id Not Found",true,`/labels/${id}`);
+    await log(
+      email,
+      `Query`,
+      ipAddress,
+      userAgent,
+      "Id Not Found",
+      true,
+      `/labels/${id}`
+    );
     throw new Error("Id is required");
-
   }
 
   const label = await Label.findById(id);
@@ -117,32 +139,62 @@ const findSingleItem = async (id, email, ipAddress, userAgent) => {
   //     select: "name",
   //   });
   // }
-  await log(email,`Query`,ipAddress, userAgent,`Single Label: ${id}`,true,`/labels/${id}`);
+  await log(
+    email,
+    `Query`,
+    ipAddress,
+    userAgent,
+    `Single Label: ${id}`,
+    true,
+    `/labels/${id}`
+  );
   return {
     ...label._doc,
     id: label.id,
   };
 };
 
-const updateOrCreate = async (id, labelName, email, ipAddress, userAgent) => {
+const updateOrCreate = async (id, labelName,website, address, country, state,status, email, ipAddress, userAgent) => {
   try {
     if (id) {
       // If ID exists, update the label
       let label = await Label.findByIdAndUpdate(
         id,
-        { labelName: labelName },
+        { labelName: labelName,
+          website: website,
+          address: address,
+          country: country,
+          state: state,
+          status: status
+        },
         {
           new: true,
           upsert: true,
         }
       );
-      await log(email,`Update`,ipAddress, userAgent,`Label Updated Successfully ${id}`,true,`/labels/${id}`); 
+      await log(
+        email,
+        `Update`,
+        ipAddress,
+        userAgent,
+        `Label Updated Successfully ${id}`,
+        true,
+        `/labels/${id}`
+      );
       return label;
     } else {
       // If ID does not exist, create a new label
       const newLabel = new Label(labelName);
       const savedLabel = await newLabel.save();
-      await log(email,`Create`,ipAddress, userAgent,`Label Create Successfully ${id}`,true,`/labels/${id}`); 
+      await log(
+        email,
+        `Create`,
+        ipAddress,
+        userAgent,
+        `Label Create Successfully ${id}`,
+        true,
+        `/labels/${id}`
+      );
       return savedLabel;
     }
   } catch (error) {
@@ -152,15 +204,31 @@ const updateOrCreate = async (id, labelName, email, ipAddress, userAgent) => {
   }
 };
 
-const removeItem = async (id, res,email, ipAddress, userAgent) => {
+const removeItem = async (id, res, email, ipAddress, userAgent) => {
   const label = await Label.findById(id);
-  
+
   if (!label) {
-    await log(email,`Delete`,ipAddress, userAgent,"Id Not Found",true,`/labels/${id}`);
+    await log(
+      email,
+      `Delete`,
+      ipAddress,
+      userAgent,
+      "Id Not Found",
+      true,
+      `/labels/${id}`
+    );
     res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
   } else {
     await Label.findByIdAndDelete(id);
-    await log(email,`Deleted`,ipAddress, userAgent,`Label Deleted Successfully ${id}`,true,`/labels/${id}`);
+    await log(
+      email,
+      `Deleted`,
+      ipAddress,
+      userAgent,
+      `Label Deleted Successfully ${id}`,
+      true,
+      `/labels/${id}`
+    );
     res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
 };
