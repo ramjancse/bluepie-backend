@@ -42,6 +42,7 @@ const artistSchema = new Schema(
           type: String,
           enum: nameOfTypeValues,
         },
+        status: Boolean
       },
     ],
     artistName: {
