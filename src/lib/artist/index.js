@@ -2,7 +2,7 @@ const { Artist } = require("../../model");
 const defaults = require("../../config/defaults");
 const { notFound } = require("../../utils/error");
 const { ObjectId } = require("mongoose").Types;
-const {log} = require("../../lib/log/index");
+const { log } = require("../../lib/log/index");
 
 const findAllItems = async ({
   page = defaults.page,
@@ -25,7 +25,15 @@ const findAllItems = async ({
     .skip(page * limit - limit)
     .limit(limit);
 
-  await log(email,`Query`, ipAddress, userAgent, "Send All Artist Data", true, `/artists`);
+  await log(
+    email,
+    `Query`,
+    ipAddress,
+    userAgent,
+    "Send All Artist Data",
+    true,
+    `/artists`
+  );
 
   return artists.map((artist) => ({
     ...artist._doc,
@@ -51,6 +59,10 @@ const create = async ({
   artistLinks,
   socialMedia,
   region,
+  artistEmail,
+  areaCode,
+  phoneNumber,
+  address,
   artistDiscription,
   createdAt,
   updatedAt,
@@ -76,6 +88,10 @@ const create = async ({
     artistLinks,
     socialMedia,
     region,
+    artistEmail,
+    areaCode,
+    phoneNumber,
+    address,
     artistDiscription,
     createdAt,
     updatedAt,
@@ -83,7 +99,15 @@ const create = async ({
   });
 
   await artist.save();
-  await log(email, `Created`, ipAddress, userAgent, "New Artist Created", true, "/artists/add");
+  await log(
+    email,
+    `Created`,
+    ipAddress,
+    userAgent,
+    "New Artist Created",
+    true,
+    "/artists/add"
+  );
 
   return {
     ...artist._doc,
@@ -93,14 +117,30 @@ const create = async ({
 
 const findSingleItem = async (id, email, ipAddress, userAgent) => {
   if (!id) {
-    await log(email,`Query`,ipAddress, userAgent,`Single Artist Query Not Found: ${id}`, true, `/artists/${id}`);
-    throw new Error("Id is required")
-  };
+    await log(
+      email,
+      `Query`,
+      ipAddress,
+      userAgent,
+      `Single Artist Query Not Found: ${id}`,
+      true,
+      `/artists/${id}`
+    );
+    throw new Error("Id is required");
+  }
 
   const artist = await Artist.findById(id);
 
   if (!artist) {
-    await log(email, `Query`, ipAddress, userAgent, "Id Not Found", true, `/artists/${id}`);
+    await log(
+      email,
+      `Query`,
+      ipAddress,
+      userAgent,
+      "Id Not Found",
+      true,
+      `/artists/${id}`
+    );
     throw notFound();
   }
 
@@ -112,14 +152,22 @@ const findSingleItem = async (id, email, ipAddress, userAgent) => {
   //     select: "name",
   //   });
   // }
-  await log(email,`Query`,ipAddress, userAgent, `Single Artist data: ${id}`,true,`/artists/${id}`);
+  await log(
+    email,
+    `Query`,
+    ipAddress,
+    userAgent,
+    `Single Artist data: ${id}`,
+    true,
+    `/artists/${id}`
+  );
   return {
     ...artist._doc,
     id: artist.id,
   };
 };
 
-const updateOrCreate = async (id, artistData,email, ipAddress, userAgent) => {
+const updateOrCreate = async (id, artistData, email, ipAddress, userAgent) => {
   try {
     let artist;
 
@@ -130,13 +178,29 @@ const updateOrCreate = async (id, artistData,email, ipAddress, userAgent) => {
           new: true,
           upsert: true,
         });
-        await log(email,'Update', ipAddress, userAgent,`Single Artist data updated:  ${id}`,true, `/artist/${id}`);
+        await log(
+          email,
+          "Update",
+          ipAddress,
+          userAgent,
+          `Single Artist data updated:  ${id}`,
+          true,
+          `/artist/${id}`
+        );
 
         artist = artistData;
       } else {
         artist = new Artist(artistData);
         await artist.save();
-        await log(email,'Create', ipAddress, userAgent,`Single Artist data Create:  ${id}`,true, `/artist/${id}`);
+        await log(
+          email,
+          "Create",
+          ipAddress,
+          userAgent,
+          `Single Artist data Create:  ${id}`,
+          true,
+          `/artist/${id}`
+        );
       }
     }
 
@@ -144,11 +208,18 @@ const updateOrCreate = async (id, artistData,email, ipAddress, userAgent) => {
   } catch (error) {
     // Handle errors
     console.error("Error updating or creating artist:", error);
-    await log(email,'Error', ipAddress, userAgent,`Error to update artist data:  ${id}`,true, `/artist/${id}`);
+    await log(
+      email,
+      "Error",
+      ipAddress,
+      userAgent,
+      `Error to update artist data:  ${id}`,
+      true,
+      `/artist/${id}`
+    );
     throw error;
   }
 };
-
 
 const updateProperties = async (id, { title, description, status }) => {
   const artist = await Artist.findById(id);
@@ -170,11 +241,27 @@ const removeItem = async (id, res, email, ipAddress, userAgent) => {
   const artist = await Artist.findById(id);
 
   if (!artist) {
-    await log(email,`Delete`, ipAddress, userAgent, "Id Not Found :", true, `/artist/${id}`);
+    await log(
+      email,
+      `Delete`,
+      ipAddress,
+      userAgent,
+      "Id Not Found :",
+      true,
+      `/artist/${id}`
+    );
     res.status(404).json({ error: "ID not found" }); // Sending a JSON response for ID not found
   } else {
     await Artist.findByIdAndDelete(id);
-    await log(email,`Delete`, ipAddress, userAgent, "Artist Data deleted successfully", true, `/artist/${id}`);
+    await log(
+      email,
+      `Delete`,
+      ipAddress,
+      userAgent,
+      "Artist Data deleted successfully",
+      true,
+      `/artist/${id}`
+    );
     res.status(200).json({ message: "Data deleted successfully" }); // Sending a JSON response for successful deletion
   }
 };

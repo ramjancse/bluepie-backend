@@ -2,7 +2,7 @@ const labelService = require("../../../../lib/label");
 
 const create = async (req, res, next) => {
   // Extract other fields from req.body
-  const { labelName, author } = req.body;
+  const { labelName,website, address,country, state, status, author } = req.body;
   const email = req.user.email;
   const ipAddress = req.ip || req.connection.remoteAddress;
   const userAgent = req.userAgent;

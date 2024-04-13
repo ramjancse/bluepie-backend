@@ -58,6 +58,19 @@ const artistSchema = new Schema(
     region: {
       type: String,
     },
+    artistEmail: {
+      type: String,
+      unique: true
+    },
+    areaCode: {
+      type: Number,
+    },
+    phoneNumber: {
+      type: Number,
+    },
+    address: {
+      type: String,
+    },
     artistImage: {
       type: String,
     },

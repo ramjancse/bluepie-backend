@@ -2,7 +2,7 @@
 
 // const updateItem = async (req, res, next) => {
 //   const { id } = req.params;
-  
+
 //   const {
 //     artistId,
 //     userId,
@@ -42,8 +42,6 @@
 //     upcean,
 //     tracks
 //  };
-
-
 
 //  try {
 //    const album = await albumService.updateOrCreate(id, albumData);
@@ -110,84 +108,99 @@ const updateItem = async (req, res, next) => {
   //     return res.status(400).json({ error: err.message });
   //   }
 
-    const { id } = req.params;
-    const email =  req.user.email
-    const ipAddress = req.ip || req.connection.remoteAddress;
-    const userAgent = req.userAgent;
+  const { id } = req.params;
+  const email = req.user.email;
+  const ipAddress = req.ip || req.connection.remoteAddress;
+  const userAgent = req.userAgent;
 
-    const {
-      artistId,
-      albumType,
-      albumName,
-      albumCover,
-      albumGenre,
-      metadataLanguage,
-      primaryArtist,
-      featuringArtist,
-      originalReleaseDate,
-      recordLabel,
-      pLineYear,
-      pLine,
-      cLineYear,
-      cLine,
-      upcean,
-      tracks,
+  const {
+    artistId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    albumSubGenre,
+    platforms,
+    formatType,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    digitalReleaseDate,
+    recordLabel,
+    albumVersion,
+    pLineYear,
+    pLine,
+    cLineYear,
+    cLine,
+    upcean,
+    tracks,
+  } = req.body;
 
-    } = req.body;
+  // let albumCover = req.file ? req.file.path : null;
 
-    // let albumCover = req.file ? req.file.path : null;
+  // Resize the image to desired dimensions
+  // if (albumCover) {
+  //   try {
+  //     const resizedImagePath = `${albumCover
+  //       .split(".")
+  //       .slice(0, -1)
+  //       .join(".")}_resized.jpg`;
 
-    // Resize the image to desired dimensions
-    // if (albumCover) {
-    //   try {
-    //     const resizedImagePath = `${albumCover
-    //       .split(".")
-    //       .slice(0, -1)
-    //       .join(".")}_resized.jpg`;
+  //     await sharp(albumCover).resize({ width: 1000, height: 1000 }).toFile(resizedImagePath);
 
-    //     await sharp(albumCover).resize({ width: 1000, height: 1000 }).toFile(resizedImagePath);
+  //     // Update albumCover to the resized image path
+  //     albumCover = resizedImagePath;
+  //   } catch (error) {
+  //     console.error("Error resizing image:", error);
+  //     return res.status(500).json({ error: "Image resizing failed" });
+  //   }
+  // }
 
-    //     // Update albumCover to the resized image path
-    //     albumCover = resizedImagePath;
-    //   } catch (error) {
-    //     console.error("Error resizing image:", error);
-    //     return res.status(500).json({ error: "Image resizing failed" });
-    //   }
-    // }
+  const albumData = {
+    artistId,
+    albumType,
+    albumName,
+    albumCover,
+    albumGenre,
+    albumSubGenre,
+    platforms,
+    formatType,
+    metadataLanguage,
+    primaryArtist,
+    featuringArtist,
+    originalReleaseDate,
+    digitalReleaseDate,
+    recordLabel,
+    albumVersion,
+    pLineYear,
+    pLine,
+    cLineYear,
+    cLine,
+    upcean,
+    tracks,
+  };
 
-    const albumData = {
-      artistId,
-      albumType,
-      albumName,
-      albumCover,
-      albumGenre,
-      metadataLanguage,
-      primaryArtist,
-      featuringArtist,
-      originalReleaseDate,
-      recordLabel,
-      pLineYear,
-      pLine,
-      cLineYear,
-      cLine,
-      upcean,
-      tracks,
+  try {
+    const album = await albumService.updateOrCreate(
+      id,
+      albumData,
+      email,
+      ipAddress,
+      userAgent
+    );
+    const response = {
+      code: 200,
+      message: "Updated successfully",
+      data: album,
+      links: {
+        self: `albums/${album.id}`,
+      },
     };
-
-    try {
-      const album = await albumService.updateOrCreate(id, albumData,email, ipAddress, userAgent );
-      const response = {
-        code: 200,
-        message: "Updated successfully",
-        data: album,
-        links: {
-          self: `albums/${album.id}`,
-        },
-      };
-      res.status(200).json(response);
-    } catch (e) {
-      next(e);
-    }
+    res.status(200).json(response);
+  } catch (e) {
+    next(e);
+  }
   // });
 };
 

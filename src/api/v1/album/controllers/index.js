@@ -1,4 +1,5 @@
 const findAllItems = require("./findAllItems");
+const upload = require("./upload");
 const findSingleItem = require("./findSingleItem");
 const updateItem = require("./updateItem");
 const create = require("./create");
@@ -11,5 +12,6 @@ module.exports = {
   findSingleItem,
   updateItem,
   // updateItemPatch,
-  removeItem
+  removeItem,
+  upload
 };

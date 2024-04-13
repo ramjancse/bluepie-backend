@@ -2,15 +2,22 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Define enums
-const albumTypeValues = ["Album", "EP", "Single"];
+const releaseTypeValues = ["Audio", "Video"]; // ["Album", "EP", "Single", "Audio", "Video"];
+const formatTypeValues = ["Single", "Album", "Compilation", "Music Video"];
+
 const albumGenreValues = [
+  "Hip Hop",
+  "Country",
+  "Disco",
+  "Jazz",
+  "Reggae",
+  "Classical",
   "Pop",
   "Rock",
-  "Hip Hop",
+  "Metal",
+  "Blues",
   "R&B",
-  "Country",
   "Electronic",
-  "Jazz",
   "Classical",
   "World Music",
   "Latin",
@@ -19,6 +26,7 @@ const albumGenreValues = [
   "Contemporary Folk",
   "Other",
 ];
+
 const languageValues = [
   "English",
   "Spanish",
@@ -28,80 +36,82 @@ const languageValues = [
   "Japanese",
   "Other",
 ];
-const typeOfTrackValues = [
-  "Lyrical",
-  "Instrumental"
-];
+const trackTypeValues = ["Lyrical", "Instrumental"];
 
 const albumStatusValue = [
   "Draft",
   "Published",
   "Scheduled",
   "Archived",
-  "Deleted",   
+  "Deleted",
   "Under Review",
   "Pending Approval",
-  "Flagged",   
+  "Flagged",
   "Drafting",
-  "Scheduled for Revision"
-]
+  "Scheduled for Revision",
+];
+
+const trackGenreValues = [
+  "Indie",
+  "Singer",
+  "Artist",
+  "Lyricist",
+  "Composer",
+  "Producer",
+  "Band",
+  "Group",
+];
+
+const trackSubGenreValues = [
+  "Indie",
+  "Singer",
+  "Artist",
+  "Lyricist",
+  "Composer",
+  "Producer",
+  "Band",
+  "Group",
+];
 
 const trackSchema = new Schema({
-  audioFile: {
+  trackTitle: {
     type: String,
   },
-  metadataLanguage: {
-    type: String,
-    enum: languageValues,
-  },
-  typeOfTrack: {
-    type: String,
-    enum: typeOfTrackValues,
-  },
-  titleOfTrack: {
+  trackVersion: {
     type: String,
   },
-  version: {
+  trackArtist: [{ name: String }],
+  trackArtistAdditional: [{ name: String }],
+  trackArtistFeaturing: [{ name: String }],
+  trackLanguage: {
     type: String,
+    // enum: languageValues,
   },
+  audioLanguage: {
+    type: String,
+    // enum: languageValues,
+  },
+  isrc: String,
   duration: {
     type: String,
   },
+  trackGenre: [
+    { name: { 
+      type: String, 
+      // enum: trackGenreValues 
+    }, 
+    status: Boolean },
+  ],
+  trackSubGenre: [
+    { name: { 
+      type: String, 
+      // enum: trackSubGenreValues 
+    }, 
+    status: Boolean },
+  ],
   explicit: {
     type: String,
   },
-  trackGenre: [
-    {
-      name: String,
-      status: Boolean
-    },
-  ],
-  trackMood: [
-    {
-      name: String,
-      status: Boolean
-    },
-  ],
-  mix: [
-    {
-      name: String,
-      status: Boolean
-    },
-  ],
-  tags: [
-    {
-      name: String,
-    },
-  ],
-  audioLanguage: {
-    type: String,
-    enum: languageValues,
-  },
-  primaryArtist: [
-    {
-      name: String,
-    },
-  ],
   composer: [
     {
       name: String,
@@ -112,55 +122,85 @@ const trackSchema = new Schema({
       name: String,
     },
   ],
-  arranger: [
-    {
-      name: String,
-    },
-  ],
-  featuringArtist: [
-    {
-      name: String,
-    },
-  ],
   producer: [
     {
       name: String,
     },
   ],
-  mixer: [
+  remixer: [
     {
       name: String,
     },
   ],
-  trackLinks: [
-    {
-      name: String,
-      link: String,
-    },
-  ],
-  lyrics: {
+
+  // audioFile: {
+  //   type: String,
+  // },
+  trackType: {
     type: String,
+    enum: trackTypeValues,
   },
-  rating: {
-    type: Number,
-  },
-  contract: {
-    type: String,
-  },
-  complianceRight: {
-    type: Boolean,
-  },
-  videoRights: {
-    type: Boolean,
-  },
-  audioRights: {
-    type: Boolean,
-  },
-  promoRights: {
-    type: Boolean,
-  },
-  catalogNumber: String,
-  isrc: String,
+
+  // trackMood: [
+  //   {
+  //     name: String,
+  //     status: Boolean,
+  //   },
+  // ],
+  // mix: [
+  //   {
+  //     name: String,
+  //     status: Boolean,
+  //   },
+  // ],
+  // tags: [
+  //   {
+  //     name: String,
+  //   },
+  // ],
+  // primaryArtist: [
+  //   {
+  //     name: String,
+  //   },
+  // ],
+  // arranger: [
+  //   {
+  //     name: String,
+  //   },
+  // ],
+  // featuringArtist: [
+  //   {
+  //     name: String,
+  //   },
+  // ],
+  // trackLinks: [
+  //   {
+  //     name: String,
+  //     link: String,
+  //   },
+  // ],
+  // lyrics: {
+  //   type: String,
+  // },
+  // rating: {
+  //   type: Number,
+  // },
+  // contract: {
+  //   type: String,
+  // },
+  // complianceRight: {
+  //   type: Boolean,
+  // },
+  // videoRights: {
+  //   type: Boolean,
+  // },
+  // audioRights: {
+  //   type: Boolean,
+  // },
+  // promoRights: {
+  //   type: Boolean,
+  // },
+  // catalogNumber: String,
 });
 
 const albumSchema = new Schema(
@@ -181,25 +221,45 @@ const albumSchema = new Schema(
     },
     status: {
       type: String,
-      enum: albumStatusValue,
+      // enum: albumStatusValue,
     },
-    albumType: {
+    releaseVersion: {
       type: String,
-      enum: albumTypeValues,
+    },
+    releaseType: {
+      type: String,
+      enum: releaseTypeValues,
+      // required: true,
+    },
+    formatType: {
+      type: String,
+      enum: formatTypeValues,
+      // required: true,
+    },
+    releaseTitle: {
+      type: String,
+      // required: true,
+    },
+    releaseCover: {
+      type: String,
       // required: true
     },
-    albumName: {
-      type: String,
-      // required: true
-    },
-    albumCover: {
-      type: String,
-      // required: true
-    },
-    albumGenre: [
+    releaseGenre: [
       {
         name: String,
-        status: Boolean
+        status: Boolean,
+      },
+    ],
+    releaseSubGenre: [
+      {
+        name: String,
+        status: Boolean,
+      },
+    ],
+    platforms: [
+      {
+        name: String,
+        status: Boolean,
       },
     ],
     metadataLanguage: {
@@ -207,17 +267,21 @@ const albumSchema = new Schema(
       enum: languageValues,
       // required: true
     },
-    primaryArtist: [
+    releasePrimaryArtist: [
       {
-        name: String,
+        name: { type: String }, // required: true
       },
     ],
-    featuringArtist: [
+    releaseSecondaryArtist: [
       {
-        name: String,
+        name: { type: String },
       },
     ],
     originalReleaseDate: {
+      type: String,
+      // required: true,
+    },
+    digitalReleaseDate: {
       type: String,
       // required: true
     },
@@ -225,10 +289,10 @@ const albumSchema = new Schema(
       type: String,
       // required: true
     },
+    pLineCompany: String,
     pLineYear: String,
-    pLine: String,
+    cLineCompany: String,
     cLineYear: String,
-    cLine: String,
     upcean: String,
     tracks: [trackSchema],
     author: {
@@ -236,9 +300,17 @@ const albumSchema = new Schema(
       ref: "User",
     },
     link: String,
+    releaseLanguage: {
+      type: String,
+      enum: languageValues,
+      // required: true
+    },
+    catalogNumber: String,
+    releaseExplicit: Boolean,
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

@@ -2,7 +2,7 @@ const artistService = require("../../../../lib/artist");
 
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
-  const email =  req.user.email
+  const email = req.user.email;
   const ipAddress = req.ip || req.connection.remoteAddress;
   const userAgent = req.userAgent;
 
@@ -13,6 +13,10 @@ const updateItem = async (req, res, next) => {
     fullName,
     sex,
     region,
+    artistEmail,
+    areaCode,
+    phoneNumber,
+    address,
     artistImage,
     artistDescription,
     artistLinks,
@@ -27,6 +31,10 @@ const updateItem = async (req, res, next) => {
     fullName,
     sex,
     region,
+    artistEmail,
+    areaCode,
+    phoneNumber,
+    address,
     artistImage,
     artistDescription,
     artistLinks,
@@ -37,7 +45,13 @@ const updateItem = async (req, res, next) => {
   };
 
   try {
-    const artist = await artistService.updateOrCreate(id, artistData, email, ipAddress, userAgent);
+    const artist = await artistService.updateOrCreate(
+      id,
+      artistData,
+      email,
+      ipAddress,
+      userAgent
+    );
     const response = {
       code: 200,
       message: "Updated successfully",

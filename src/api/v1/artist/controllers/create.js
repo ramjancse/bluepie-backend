@@ -13,15 +13,18 @@ const create = async (req, res, next) => {
     artistLinks,
     socialMedia,
     region,
+    artistEmail,
+    areaCode,
+    phoneNumber,
+    address,
     artistDescription,
     createdAt,
     updatedAt,
     author,
   } = req.body;
-  const email =  req.user.email
+  const email = req.user.email;
   const ipAddress = req.ip || req.connection.remoteAddress;
   const userAgent = req.userAgent;
-
 
   try {
     const artist = await artistService.create({
@@ -35,6 +38,10 @@ const create = async (req, res, next) => {
       artistLinks,
       socialMedia,
       region,
+      artistEmail,
+      areaCode,
+      phoneNumber,
+      address,
       artistDescription,
       createdAt,
       updatedAt,

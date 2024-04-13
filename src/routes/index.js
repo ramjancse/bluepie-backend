@@ -8,6 +8,9 @@ const { controllers: authController } = require("../api/v1/auth");
 const authenticate = require("../middleware/authenticate");
 const authorize = require("../middleware/authorize");
 // const ownership = require("../middleware/ownership");
+const multer = require('multer');
+const xlsx = require('xlsx');
+const upload = multer({ dest: 'uploads/' });
 
 // Auth Route
 router
@@ -87,10 +90,14 @@ router
   //   )
   .delete(authenticate, authorize("admin", "user"), albumController.removeItem);
 
+router.post('/api/v1/uploads', upload.single('excelFile'), albumController.upload)
+
 // Logs
   router
   .route("/api/v1/logs")
   .get(authenticate, authorize("admin", "user"), logController.findAllItems);
 // .post(authenticate, authorize("admin", "user"), logController.create);
+
+
 
 module.exports = router;
