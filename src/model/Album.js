@@ -96,18 +96,22 @@ const trackSchema = new Schema({
     type: String,
   },
   trackGenre: [
-    { name: { 
-      type: String, 
-      // enum: trackGenreValues 
-    }, 
-    status: Boolean },
+    {
+      name: {
+        type: String,
+        enum: trackGenreValues
+      },
+      status: Boolean,
+    },
   ],
   trackSubGenre: [
-    { name: { 
-      type: String, 
-      // enum: trackSubGenreValues 
-    }, 
-    status: Boolean },
+    {
+      name: {
+        type: String,
+        enum: trackSubGenreValues
+      },
+      status: Boolean,
+    },
   ],
   explicit: {
     type: String,
@@ -282,7 +286,7 @@ const albumSchema = new Schema(
       // required: true,
     },
     digitalReleaseDate: {
-      type: String,
+      type: Date,
       // required: true
     },
     recordLabel: {
