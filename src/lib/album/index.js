@@ -15,11 +15,11 @@ const findAllItems = async ({
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
   const filter = {
-    artistName: { $regex: search, $options: "i" },
+    releaseTitle: { $regex: search, $options: "i" },
   };
 
   const albums = await Album.find()
-    .populate({ path: "author", select: "albumName" })
+    .populate({ path: "author", select: "releaseTitle" })
     .sort(sortStr)
     .skip(page * limit - limit)
     .limit(limit);
@@ -46,6 +46,7 @@ const count = ({ search = "" }) => {
   };
   return Album.countDocuments(filter);
 };
+
 
 const create = async ({
   artistId,

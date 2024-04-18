@@ -1,33 +1,33 @@
 const defaults = require("../config/defaults");
 const { generateQueryString } = require("./qs");
+const Album = require("../model/Album");
+
 
 const getPagination = (
-  totalItems = defaults.totalItems,
-  limit = defaults.limit,
-  page = defaults.page
+  totalItems,
+  limit,
+  page // Default page to 1 if not provided
 ) => {
-  const totalPage = (6 / 2);
-  console.log('totalItems', totalItems);
-  console.log("total page", typeof(totalPage), totalPage);
-  console.log("total page int", typeof(parseInt(totalPage)), totalPage);
+ 
+  const totalPages = Math.ceil( totalItems / limit); // Calculate total pages
+
   const pagination = {
-    page,
-    limit,
     totalItems,
-    totalPage,
+    totalPages,
+    currentPage: page,
+    limit,
   };
-  console.log("pagination", pagination);
-  if (page < totalPage) {
-    pagination.next = page + 1;
+
+  if (page < totalPages) {
+    pagination.nextPage = page + 1;
   }
 
   if (page > 1) {
-    pagination.prev = page - 1;
+    pagination.prevPage = page - 1;
   }
 
   return pagination;
 };
-
 const getHATEOASForAllItems = ({
   url = "/",
   hasNext = false,

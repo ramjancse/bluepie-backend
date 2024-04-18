@@ -42,6 +42,7 @@ const upload = async (req, res, next) => {
         releaseVersion: row.releaseVersion,
         releasePrimaryArtist: [{ name: row.releasePrimaryArtist }],
         digitalReleaseDate: row.digitalReleaseDate,
+        originalReleaseDate: row.originalReleaseDate,
         upcean: row.upcean,
         tracks: tracks,
       };

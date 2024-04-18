@@ -286,7 +286,7 @@ const albumSchema = new Schema(
       // required: true,
     },
     digitalReleaseDate: {
-      type: Date,
+      type: String,
       // required: true
     },
     recordLabel: {

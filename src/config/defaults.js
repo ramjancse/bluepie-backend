@@ -1,6 +1,6 @@
 const config = {
-  totalItems: 6,
-  limit: 10,
+  totalItems: 1000,
+  limit:10,
   page: 1,
   sortType: "dsc",
   sortBy: "updatedAt",
