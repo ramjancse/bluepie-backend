@@ -4,11 +4,11 @@ const { notFound } = require("../../utils/error");
 const { log } = require("../../lib/log/index");
 
 const findAllItems = async ({
-  page = defaults.page,
-  limit = defaults.limit,
-  sortType = defaults.sortType,
-  sortBy = defaults.sortBy,
-  search = defaults.search,
+  page ,
+  limit,
+  sortType,
+  sortBy,
+  search,
   email,
   ipAddress,
   userAgent,
@@ -18,11 +18,25 @@ const findAllItems = async ({
     releaseTitle: { $regex: search, $options: "i" },
   };
 
-  const albums = await Album.find()
-    .populate({ path: "author", select: "releaseTitle" })
-    .sort(sortStr)
-    .skip(page * limit - limit)
-    .limit(limit);
+
+
+  const albums = await Album.find({
+    $or: [
+      { releaseTitle: { $regex: search, $options: 'i' } }, // Search in the 'title' field
+      { 'releasePrimaryArtist.name': { $regex: search, $options: 'i' } }, // Search in the 'description' field
+      // Add more fields as needed
+    ],
+  })
+  .populate({ path: "author", select: "releaseTitle" })
+  .sort(sortStr)
+  .skip(page * limit - limit)
+  .limit(limit);
+
+  // const albums = await Album.find({filter})
+  //   .populate({ path: "author", select: "releaseTitle" })
+  //   .sort(sortStr)
+  //   .skip(page * limit - limit)
+  //   .limit(limit);
 
   await log(
     email,

@@ -27,7 +27,7 @@ const upload = async (req, res, next) => {
           trackArtist: [{ name: row[`trackArtist${i}`] }],
           lyricist: [{ name: row[`lyricist${i}`] }],
           composer: [{ name: row[`composer${i}`] }],
-          producer: [{ name: row[`producer${i}`] }],
+          // producer: [{ name: row[`producer${i}`] }],
           duration: row[`duration${i}`],
           isrc: row[`isrc${i}`],
           trackVersion: row[`trackVersion${i}`],
