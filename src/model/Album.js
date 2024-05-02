@@ -227,6 +227,10 @@ const albumSchema = new Schema(
       type: String,
       // enum: albumStatusValue,
     },
+    albumStatus: {
+      type: String,
+      enum: albumStatusValue,
+    },
     releaseVersion: {
       type: String,
     },

@@ -5,6 +5,7 @@ const create = async (req, res, next) => {
   const {
     artistId,
     status,
+    albumStatus,
     releaseVersion,
     releaseType,
     formatType,
@@ -42,6 +43,7 @@ const create = async (req, res, next) => {
     const album = await albumService.create({
       artistId,
       status,
+      albumStatus,
       releaseVersion,
       releaseType,
       formatType,

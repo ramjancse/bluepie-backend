@@ -65,6 +65,7 @@ const count = ({ search = "" }) => {
 const create = async ({
   artistId,
       status,
+      albumStatus,
       releaseVersion,
       releaseType,
       formatType,
@@ -114,6 +115,7 @@ const create = async ({
   const album = new Album({
     artistId,
     status,
+    albumStatus,
     releaseVersion,
     releaseType,
     formatType,

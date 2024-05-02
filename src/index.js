@@ -17,8 +17,14 @@ const main = async () => {
   try {
     await connectDB();
     app.use(morgan("dev"));
-
-    app.use(cors());
+    const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+    const corsOptions = {
+      origin: allowedOrigins,
+      credentials: true,
+      optionSuccessStatus: 200
+    }  
+    app.use(cors(corsOptions));
+    
     app.set('trust proxy', true);
     app.use(routes);
 

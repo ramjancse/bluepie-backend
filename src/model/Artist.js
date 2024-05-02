@@ -45,7 +45,7 @@ const artistSchema = new Schema(
         status: Boolean
       },
     ],
-    artistName: {
+    name: {
       type: String,
     },
     fullName: {

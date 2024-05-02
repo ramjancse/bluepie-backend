@@ -91,6 +91,7 @@ router
   .delete(authenticate, authorize("admin", "user"), albumController.removeItem);
 
 router.post('/api/v1/uploads', upload.single('excelFile'), albumController.upload)
+// router.post('/api/v1/format', upload.single('excelFile'), albumController.format)
 
 // Logs
   router

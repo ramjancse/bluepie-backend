@@ -16,11 +16,11 @@ const findAllItems = async ({
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
   const filter = {
-    artistName: { $regex: search, $options: "i" },
+    name: { $regex: search, $options: "i" },
   };
 
   const artists = await Artist.find()
-    .populate({ path: "author", select: "artistName" })
+    .populate({ path: "author", select: "name" })
     .sort(sortStr)
     .skip(page * limit - limit)
     .limit(limit);
@@ -43,7 +43,7 @@ const findAllItems = async ({
 
 const count = ({ search = "" }) => {
   const filter = {
-    artistName: { $regex: search, $options: "i" },
+    name: { $regex: search, $options: "i" },
   };
   return Artist.countDocuments(filter);
 };
@@ -52,7 +52,7 @@ const create = async ({
   artistType,
   status,
   nameOfType,
-  artistName,
+  name,
   fullName,
   sex,
   artistImage,
@@ -71,7 +71,7 @@ const create = async ({
   ipAddress,
   userAgent,
 }) => {
-  if (!artistName || !author) {
+  if (!name || !author) {
     const error = new Error("Invalid parameters");
     error.status = 400;
     throw error;
@@ -81,7 +81,7 @@ const create = async ({
     artistType,
     status,
     nameOfType,
-    artistName,
+    name,
     fullName,
     sex,
     artistImage,

@@ -36,6 +36,8 @@ const upload = async (req, res, next) => {
         tracks.push(track);
       }
 
+    
+
       let dataForInsert = {
         releaseTitle: row.releaseTitle,
         status: row.status,
@@ -48,8 +50,12 @@ const upload = async (req, res, next) => {
       };
 
       const finalData = new Album(dataForInsert);
+
       await finalData.save();
     }
+
+    
+
 
     res.json({ message: "Data uploaded successfully!" });
   } catch (error) {
